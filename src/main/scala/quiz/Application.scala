@@ -6,7 +6,7 @@ import quiz.view.View
 import quiz.model.Model
 import quiz.controller.Controller
 
-object QuizGameApp extends JFXApp {
+object Application extends JFXApp {
   
   val configuration = ConfigFactory.load("app.conf")
   val controller = new Controller(configuration)
