@@ -2,6 +2,9 @@ package quiz
 
 import scalafx.application.JFXApp
 import com.typesafe.config.ConfigFactory
+import quiz.view.View
+import quiz.model.Model
+import quiz.controller.Controller
 
 object QuizGameApp extends JFXApp {
   
