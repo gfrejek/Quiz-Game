@@ -11,9 +11,9 @@ case class SportsCategory() extends Category
 case class ScienceCategory() extends Category
 
 object Category {
-    val Culture = new CultureCategory()
-    val Sports = new SportsCategory()
-    val Science = new ScienceCategory()
+  val Culture = new CultureCategory()
+  val Sports = new SportsCategory()
+  val Science = new ScienceCategory()
 }
 
 case class Game(player: Player, category: Category)
