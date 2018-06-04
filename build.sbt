@@ -77,3 +77,7 @@ libraryDependencies += "com.typesafe" % "config" % "1.3.2"
 // To learn more about multi-project builds, head over to the official sbt
 // documentation at http://www.scala-sbt.org/documentation.html
 
+scalacOptions ++= Seq(
+  "-deprecation"
+)
+
