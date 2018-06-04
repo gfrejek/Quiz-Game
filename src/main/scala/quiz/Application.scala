@@ -5,7 +5,6 @@ import com.typesafe.config.ConfigFactory
 import quiz.view.View
 import quiz.model.Model
 import quiz.controller.Controller
-import scalafx.scene.input.KeyEvent
 import scalafx.stage.Screen
 import scalafx.scene.input.{KeyCodeCombination, KeyCode, KeyCombination}
 
