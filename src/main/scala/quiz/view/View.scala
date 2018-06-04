@@ -17,6 +17,7 @@ import com.typesafe.config.Config
 import scalafx.scene.input.{KeyCodeCombination, KeyCode, KeyCombination}
 import scalafx.scene.control.{Button, TextField}
 import scalafx.event.ActionEvent
+import scalafx.beans.property.StringProperty
 
 
 class View(model: Model, configuration: Config) {
@@ -44,16 +45,65 @@ class View(model: Model, configuration: Config) {
     }
   }
 
+  val gameScene = new Scene()
+
   lazy val newGameScene : Scene = new Scene {
     fill = Color.White
     root = new VBox {
       alignment = Pos.Center
-      spacing = 80
-      padding = Insets(80)
+      spacing = 40
+      padding = Insets(40)
+
+      var choosenCategory: Category = _
+      var choosenCategoryPropertyStr = StringProperty("")
+      var choosenName: String = _
+      
       lazy val userNameInput = new TextField() {
         promptText = "Your Name"
         alignment = Pos.Center
       }
+      
+      val cultButton = new Button {
+        text = "Culture"
+        prefWidth = 300
+        font = new Font(20)
+        alignment = Pos.Center
+      }
+      val scienceButton = new Button {
+        text = "Science"
+        prefWidth = 300
+        font = new Font(20)
+        alignment = Pos.Center
+      }
+      val sportsButton = new Button {
+        text = "Sports"
+        prefWidth = 300
+        font = new Font(20)
+        alignment = Pos.Center
+      }
+
+      cultButton.onAction = (e: ActionEvent) => {
+        choosenCategory = Category.Culture
+        cultButton.disable = true
+        sportsButton.disable = false
+        scienceButton.disable = false
+        choosenCategoryPropertyStr() = "Culture"
+      }
+      sportsButton.onAction = (e: ActionEvent) => {
+        choosenCategory = Category.Sports
+        cultButton.disable = false
+        sportsButton.disable = true
+        scienceButton.disable = false
+        choosenCategoryPropertyStr() = "Sports"
+      }
+      scienceButton.onAction = (e: ActionEvent) => {
+        choosenCategory = Category.Science
+        cultButton.disable = false
+        sportsButton.disable = false
+        scienceButton.disable = true
+        choosenCategoryPropertyStr() = "Science"
+      }
+
       children = List (
         smallLogo,
         new Text {
@@ -72,34 +122,33 @@ class View(model: Model, configuration: Config) {
           spacing = 100
           padding = Insets(100)
           children = List (
-            new Button {
-              text = "Culture"
-              prefWidth = 300
-              font = new Font(20)
-              alignment = Pos.Center
-              onAction = (e: ActionEvent) => { 
-                val newGame = Game(player = Player(userNameInput.text()), category = Category.Culture)
-              }
-            },
-            new Button {
-              text = "Sports"
-              prefWidth = 300
-              font = new Font(20)
-              alignment = Pos.Center
-              onAction = (e: ActionEvent) => { 
-                val newGame = Game(player = Player(userNameInput.text()), category = Category.Sports)
-              }
-            },
-            new Button {
-              text = "Science"
-              prefWidth = 300
-              font = new Font(20)
-              alignment = Pos.Center
-              onAction = (e: ActionEvent) => { 
-                val newGame = Game(player = Player(userNameInput.text()), category = Category.Science)
-              }
-            }
+            cultButton,
+            sportsButton,
+            scienceButton
           )
+        },
+        new Text {
+          text = "Choosen category:"
+          alignment = Pos.Center
+          font = new Font(15)
+        },
+        new Text {
+          text <== choosenCategoryPropertyStr
+          alignment = Pos.Center
+          font = new Font(15)
+        },
+        new Button {
+          text = "Start Game"
+          prefWidth = 400
+          font = new Font(25)
+          alignment = Pos.Center
+          onAction = (e: ActionEvent) => { 
+            if (choosenCategoryPropertyStr() != "" && userNameInput.text() != "") {
+              val newGame = Game(Player(userNameInput.text()), choosenCategory)
+              primaryStage.scene = gameScene
+              primaryStage.fullScreen = true
+            }
+          }
         },
         new Button {
           text = "Return to Menu"
@@ -213,6 +262,5 @@ class View(model: Model, configuration: Config) {
   val continueGameScene = new Scene()
   val leaderboardScene = new Scene()
   val settingScene = new Scene()
-  val gameScene = new Scene()
 
 }
