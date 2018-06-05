@@ -27,6 +27,8 @@ version := "1.0"
 libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.1"
 libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.144-R12"
 libraryDependencies += "com.typesafe" % "config" % "1.3.2"
+libraryDependencies += "org.scalaj" %% "scalaj-http" % "2.4.0"
+libraryDependencies += "io.spray" %%  "spray-json" % "1.3.3"
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go

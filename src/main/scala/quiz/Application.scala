@@ -13,7 +13,7 @@ object Application extends JFXApp {
   val configuration = ConfigFactory.load("app.conf")
   val controller = new Controller(configuration)
   val model = new Model(controller)
-  val view = new View(model, configuration)
+  val view = new View(model, controller)
   val bounds = Screen.primary.bounds
 
   stage = new JFXApp.PrimaryStage {
@@ -28,7 +28,7 @@ object Application extends JFXApp {
     fullScreen = true
   }
 
-  view.passStage(stage)
-  stage.scene = view.openingScene
+  controller.passControl(stage)
+  controller.changeScene(view.openingScene)
 
 }

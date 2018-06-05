@@ -2,6 +2,7 @@ package quiz.view
 
 import scalafx.Includes._
 import quiz.model._
+import quiz.controller.Controller
 import scalafx.scene.Scene
 import scalafx.scene.layout.{VBox, HBox}
 import scalafx.scene.text.Text
@@ -18,18 +19,14 @@ import scalafx.scene.input.{KeyCodeCombination, KeyCode, KeyCombination}
 import scalafx.scene.control.{Button, TextField}
 import scalafx.event.ActionEvent
 import scalafx.beans.property.StringProperty
+import quiz.generators.QuestionGenerator
 
 
-class View(model: Model, configuration: Config) {
+class View(model: Model, controller: Controller) {
 
-  var primaryStage: Stage = _
   val bounds = Screen.primary.bounds
-  val x_mid = bounds.minX + bounds.width / 2 - configuration.getInt("width") / 2
-  val y_mid = bounds.minY + bounds.height / 2 - configuration.getInt("height") / 2
-
-  def passStage(passed: Stage) = {
-    primaryStage = passed
-  }
+  val x_mid = bounds.minX + bounds.width / 2 - controller.config.getInt("width") / 2
+  val y_mid = bounds.minY + bounds.height / 2 - controller.config.getInt("height") / 2
 
   val smallLogo = new Text {
     text = "-----QUIZ-----"
@@ -45,7 +42,16 @@ class View(model: Model, configuration: Config) {
     }
   }
 
-  val gameScene = new Scene()
+  // STUB
+  lazy val gameScene = new Scene() {
+    val list: Option[List[Question]] = QuestionGenerator.generate(QuestionsSource.openTDB, 5)
+    list match {
+      case Some(list) => {
+        println(list)
+      }
+      case None => println("Rip")
+    }
+  }
 
   lazy val newGameScene : Scene = new Scene {
     fill = Color.White
@@ -54,54 +60,53 @@ class View(model: Model, configuration: Config) {
       spacing = 40
       padding = Insets(40)
 
-      var choosenCategory: Category = _
-      var choosenCategoryPropertyStr = StringProperty("")
-      var choosenName: String = _
+      var choosenSource: QuestionsSource = _
+      var choosenSourcePropertyStr = StringProperty("")
       
       lazy val userNameInput = new TextField() {
         promptText = "Your Name"
         alignment = Pos.Center
       }
       
-      val cultButton = new Button {
-        text = "Culture"
+      val openTDBButton = new Button {
+        text = "OpenTDB"
         prefWidth = 300
         font = new Font(20)
         alignment = Pos.Center
       }
-      val scienceButton = new Button {
-        text = "Science"
+      val theSportsDBButton = new Button {
+        text = "theSportsDB"
         prefWidth = 300
         font = new Font(20)
         alignment = Pos.Center
       }
-      val sportsButton = new Button {
-        text = "Sports"
+      val numbersAPIButton = new Button {
+        text = "NumbersAPI"
         prefWidth = 300
         font = new Font(20)
         alignment = Pos.Center
       }
 
-      cultButton.onAction = (e: ActionEvent) => {
-        choosenCategory = Category.Culture
-        cultButton.disable = true
-        sportsButton.disable = false
-        scienceButton.disable = false
-        choosenCategoryPropertyStr() = "Culture"
+      openTDBButton.onAction = (e: ActionEvent) => {
+        choosenSource = QuestionsSource.openTDB
+        openTDBButton.disable = true
+        theSportsDBButton.disable = false
+        numbersAPIButton.disable = false
+        choosenSourcePropertyStr() = "OpenTDB"
       }
-      sportsButton.onAction = (e: ActionEvent) => {
-        choosenCategory = Category.Sports
-        cultButton.disable = false
-        sportsButton.disable = true
-        scienceButton.disable = false
-        choosenCategoryPropertyStr() = "Sports"
+      theSportsDBButton.onAction = (e: ActionEvent) => {
+        choosenSource = QuestionsSource.theSportsDB
+        openTDBButton.disable = false
+        theSportsDBButton.disable = true
+        numbersAPIButton.disable = false
+        choosenSourcePropertyStr() = "theSportsDB"
       }
-      scienceButton.onAction = (e: ActionEvent) => {
-        choosenCategory = Category.Science
-        cultButton.disable = false
-        sportsButton.disable = false
-        scienceButton.disable = true
-        choosenCategoryPropertyStr() = "Science"
+      numbersAPIButton.onAction = (e: ActionEvent) => {
+        choosenSource = QuestionsSource.numbersAPI
+        openTDBButton.disable = false
+        theSportsDBButton.disable = false
+        numbersAPIButton.disable = true
+        choosenSourcePropertyStr() = "NumbersAPI"
       }
 
       children = List (
@@ -112,7 +117,7 @@ class View(model: Model, configuration: Config) {
           style = "-fx-font: normal bold 50pt sans-serif" 
         },
         new Text {
-          text = "Please provide a name and choose a category"
+          text = "Please provide a name and choose a data source"
           alignment = Pos.Center
           style = "-fx-font: normal bold 35pt sans-serif"
         },
@@ -122,18 +127,18 @@ class View(model: Model, configuration: Config) {
           spacing = 100
           padding = Insets(100)
           children = List (
-            cultButton,
-            sportsButton,
-            scienceButton
+            openTDBButton,
+            theSportsDBButton,
+            numbersAPIButton
           )
         },
         new Text {
-          text = "Choosen category:"
+          text = "Choosen data source:"
           alignment = Pos.Center
           font = new Font(15)
         },
         new Text {
-          text <== choosenCategoryPropertyStr
+          text <== choosenSourcePropertyStr
           alignment = Pos.Center
           font = new Font(15)
         },
@@ -143,10 +148,9 @@ class View(model: Model, configuration: Config) {
           font = new Font(25)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => { 
-            if (choosenCategoryPropertyStr() != "" && userNameInput.text() != "") {
-              val newGame = Game(Player(userNameInput.text()), choosenCategory)
-              primaryStage.scene = gameScene
-              primaryStage.fullScreen = true
+            if (choosenSourcePropertyStr() != "" && userNameInput.text() != "") {
+              val newGame = Game(Player(userNameInput.text()), choosenSource)
+              controller.changeScene(gameScene)
             }
           }
         },
@@ -156,8 +160,7 @@ class View(model: Model, configuration: Config) {
           font = new Font(20)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => { 
-            primaryStage.scene = menuScene
-            primaryStage.fullScreen = true
+            controller.changeScene(menuScene)
           }
         }
       )
@@ -191,8 +194,7 @@ class View(model: Model, configuration: Config) {
           font = new Font(20)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => { 
-            primaryStage.scene = newGameScene
-            primaryStage.fullScreen = true
+            controller.changeScene(newGameScene)
           }
         },
         new Button {
@@ -218,7 +220,7 @@ class View(model: Model, configuration: Config) {
           prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
-          onAction = (e: ActionEvent) => { primaryStage.close() }
+          onAction = (e: ActionEvent) => { controller.closeStage() }
         }
       )
     }
@@ -228,16 +230,16 @@ class View(model: Model, configuration: Config) {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
       case KeyCode.Enter => {
-        primaryStage.scene = menuScene
-        primaryStage.fullScreen = true
+        controller.changeScene(menuScene)
       }
       case _ =>
     }
     root = new VBox {
       padding = Insets(50, 80, 50, 80)
+      spacing = 100
       children = List (
         new Text {
-          text = "QUIZ"
+          text = "-----QUIZ-----"
           alignment = Pos.Center
           style = "-fx-font: normal bold 150pt sans-serif"
           fill = new LinearGradient (

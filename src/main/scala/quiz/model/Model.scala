@@ -5,18 +5,20 @@ import quiz.controller.Controller
 
 case class Player(name: String)
 
-sealed abstract class Category
-case class CultureCategory() extends Category
-case class SportsCategory() extends Category
-case class ScienceCategory() extends Category
+sealed abstract class QuestionsSource
+case class NumbersAPI() extends QuestionsSource
+case class OpenTDB() extends QuestionsSource
+case class TheSportsDB() extends QuestionsSource
 
-object Category {
-  val Culture = new CultureCategory()
-  val Sports = new SportsCategory()
-  val Science = new ScienceCategory()
+object QuestionsSource {
+  val numbersAPI = new NumbersAPI()
+  val openTDB = new OpenTDB()
+  val theSportsDB = new TheSportsDB()
 }
 
-case class Game(player: Player, category: Category)
+case class Question(val qs: String, val ans: List[String], val correct: String)
+
+case class Game(player: Player, data: QuestionsSource)
 
 class Model(controller: Controller) {
 
