@@ -43,7 +43,7 @@ class View(model: Model, controller: Controller) {
   }
 
   // STUB
-  lazy val gameScene = new Scene() {
+  lazy val gameScene: Scene = new Scene() {
     val list: Option[List[Question]] = QuestionGenerator.generate(QuestionsSource.openTDB, 5)
     list match {
       case Some(list) => {

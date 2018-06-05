@@ -16,6 +16,7 @@ object OpenTDBGenerator extends Generator {
       value.asJsObject.getFields("results") match {
         case Seq(listOfQuestions) => {
           implicit object QuestionJsonFormat extends RootJsonFormat[Question] {
+            // Same here
             def write(q: Question): JsValue = new JsObject (Map[String, JsValue]())
             def read(value: JsValue) = {
               value.asJsObject.getFields("question", "correct_answer", "incorrect_answers") match {
