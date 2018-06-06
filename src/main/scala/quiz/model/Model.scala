@@ -18,8 +18,6 @@ object QuestionsSource {
 
 case class Question(val qs: String, val ans: List[String], val correct: String)
 
-case class Game(player: Player, data: QuestionsSource)
-
 class Model(controller: Controller) {
 
 }

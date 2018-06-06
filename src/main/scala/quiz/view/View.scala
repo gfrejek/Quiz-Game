@@ -44,12 +44,59 @@ class View(model: Model, controller: Controller) {
 
   // STUB
   lazy val gameScene: Scene = new Scene() {
-    val list: Option[List[Question]] = QuestionGenerator.generate(QuestionsSource.openTDB, 5)
-    list match {
-      case Some(list) => {
-        println(list)
-      }
-      case None => println("Rip")
+    fill = Color.White
+    root = new VBox {
+      alignment = Pos.TopCenter
+      // spacing = 150
+      // padding = Insets(150)
+      children = List (
+        new HBox {
+          alignment = Pos.TopCenter
+          spacing = 700
+          padding = Insets(700)
+          children = List (
+            new HBox {
+              alignment = Pos.Center
+              children = List (
+                new Text {
+                  text = "Question "
+                  alignment = Pos.Center
+                },
+                new Text {
+                  text <== controller.currentGame.currentQuestion.asString()
+                  alignment = Pos.Center
+                },
+                new Text {
+                  text = "/" + controller.currentGame.numberOfQuestions
+                  alignment = Pos.Center
+                }
+              )
+            },
+            new HBox {
+              alignment = Pos.Center
+              children = List (
+                new Text {
+                  text = "Time: 00:05"
+                  alignment = Pos.Center
+                }
+              )
+            },
+            new HBox {
+              alignment = Pos.Center
+              children = List (
+                new Text {
+                  text = "Score: "
+                  alignment = Pos.Center
+                },
+                new Text {
+                  text <== controller.currentGame.score.asString()
+                  alignment = Pos.Center
+                }
+              )
+            }
+          )
+        }
+      )
     }
   }
 
@@ -149,7 +196,7 @@ class View(model: Model, controller: Controller) {
           alignment = Pos.Center
           onAction = (e: ActionEvent) => { 
             if (choosenSourcePropertyStr() != "" && userNameInput.text() != "") {
-              val newGame = Game(Player(userNameInput.text()), choosenSource)
+              controller.startNewGame(Player(userNameInput.text()), choosenSource)
               controller.changeScene(gameScene)
             }
           }
