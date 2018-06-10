@@ -2,10 +2,8 @@ package quiz.model
 
 import quiz.controller.Controller
 
-
-case class Player(name: String)
-
-sealed abstract class QuestionsSource
+@SerialVersionUID(121L)
+sealed abstract class QuestionsSource extends Serializable
 case class NumbersAPI() extends QuestionsSource
 case class OpenTDB() extends QuestionsSource
 case class TheSportsDB() extends QuestionsSource
@@ -16,7 +14,7 @@ object QuestionsSource {
   val theSportsDB = new TheSportsDB()
 }
 
-case class Question(val qs: String, val ans: List[String], val correct: String)
+case class Question(question: String, answer: List[String], correctAnswer: String)
 
 class Model(controller: Controller) {
 

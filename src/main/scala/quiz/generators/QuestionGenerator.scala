@@ -15,6 +15,9 @@ object QuestionGenerator {
       case QuestionsSource.openTDB => {
         OpenTDBGenerator.generateBatch(count)
       }
+      case _ => {
+        null
+      }
       // case TheSportsDB() => {
 
       // }

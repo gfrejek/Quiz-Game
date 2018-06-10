@@ -1,20 +1,28 @@
 package quiz.controller
 
+import java.util.Calendar
+
 import com.typesafe.config.Config
 import scalafx.scene.Scene
 import scalafx.stage.Stage
-import quiz.model.Game
-import quiz.model.Player
-import quiz.model.QuestionsSource
+import quiz.model._
 import quiz.generators.QuestionGenerator
-import quiz.model.Question
+import scalafx.beans.property.StringProperty
 
 class Controller(val config: Config) {
 
   var currentStage: Stage = _
   var currentGame: Game = _
   var currentQuestionList: List[Question] = _
-  
+  var question: Question = _
+  val highscoreManager = new HighscoreManager()
+  val gamesaveManager = new GamesaveManager()
+  var iterator: Iterator[Question] = _
+
+  var highscoreString = StringProperty(highscoreManager.getHighscoreString())
+  //TODO not the right place to put it
+  var gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
+
   def passControl(passed: Stage) = {
     currentStage = passed
   }
@@ -30,10 +38,12 @@ class Controller(val config: Config) {
 
   def startNewGame(player: Player, data: QuestionsSource) = {
     currentGame = Game.newGame(player, data)
+
     currentQuestionList = QuestionGenerator.generate(data, 12) match {
       case Some(validList) => validList
-      case None => null
+      case None => null   // TODO Exception handling
     }
+    iterator = currentQuestionList.iterator
   }
 
   def continueGame(game: Game) = {
@@ -41,8 +51,9 @@ class Controller(val config: Config) {
     val howManyLeft = game.numberOfQuestions - game.currentQuestion()
     currentQuestionList = QuestionGenerator.generate(game.data, howManyLeft) match {
       case Some(validList) => validList
-      case None => null
+      case None => null   // TODO Exception handling
     }
+    iterator = currentQuestionList.iterator
   }
 
   def gameNotFinished(): Boolean = {
@@ -50,15 +61,13 @@ class Controller(val config: Config) {
   }
 
   def askNextQuestion(): Question = {
-    val realIndex = currentGame.currentQuestion() - currentGame.doneInLastSession
-    val next = currentQuestionList(realIndex)
+    question = iterator.next()
     currentGame.currentQuestion() += 1
-    next
+    question
   }
 
   def respondToUserChoice(choice: String, elapsedTime: Int): Boolean = {
-    val realIndex = currentGame.currentQuestion() - currentGame.doneInLastSession
-    if (choice == currentQuestionList(realIndex).correct) {
+    if (choice == question.correctAnswer) {
       currentGame.score() += (1000 / elapsedTime)
       true
     } else {

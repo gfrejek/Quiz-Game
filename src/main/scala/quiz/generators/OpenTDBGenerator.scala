@@ -17,7 +17,7 @@ object OpenTDBGenerator extends Generator {
         case Seq(listOfQuestions) => {
           implicit object QuestionJsonFormat extends RootJsonFormat[Question] {
             // Same here
-            def write(q: Question): JsValue = new JsObject (Map[String, JsValue]())
+            def write(q: Question): JsValue = new JsObject (Map[String, JsValue]())   //TODO Why two JSON objects?
             def read(value: JsValue) = {
               value.asJsObject.getFields("question", "correct_answer", "incorrect_answers") match {
                 case Seq(JsString(question), JsString(correct), incorrect) =>

@@ -1,25 +1,27 @@
 package quiz.view
 
+import java.util.Calendar
+
 import scalafx.Includes._
 import quiz.model._
 import quiz.controller.Controller
-import scalafx.scene.Scene
-import scalafx.scene.layout.{VBox, HBox}
-import scalafx.scene.text.Text
-import scalafx.scene.text.Font
+import scalafx.scene.{Group, Node, Scene}
+import scalafx.scene.layout._
+import scalafx.scene.text.{Font, FontWeight, Text, TextFlow}
 import scalafx.scene.paint.Color._
 import scalafx.scene.paint._
 import scalafx.scene.effect.DropShadow
 import scalafx.geometry.Insets
 import scalafx.geometry.Pos
-import scalafx.stage.{Stage, Screen}
+import scalafx.stage.{Screen, Stage}
 import scalafx.scene.input.{KeyEvent, MouseEvent}
 import com.typesafe.config.Config
-import scalafx.scene.input.{KeyCodeCombination, KeyCode, KeyCombination}
-import scalafx.scene.control.{Button, TextField}
+import scalafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination}
+import scalafx.scene.control.{Button, ScrollPane, TextField}
 import scalafx.event.ActionEvent
 import scalafx.beans.property.StringProperty
 import quiz.generators.QuestionGenerator
+import scalafx.scene.canvas.Canvas
 
 
 class View(model: Model, controller: Controller) {
@@ -28,9 +30,10 @@ class View(model: Model, controller: Controller) {
   val x_mid = bounds.minX + bounds.width / 2 - controller.config.getInt("width") / 2
   val y_mid = bounds.minY + bounds.height / 2 - controller.config.getInt("height") / 2
 
+
   val smallLogo = new Text {
-    text = "-----QUIZ-----"
-    style = "-fx-font: normal bold 75pt sans-serif"
+    text = "-QUIZ-"
+    style = "-fx-font: normal bold 100pt sans-serif"
     fill = new LinearGradient (
       endX = 0,
       stops = Stops(White, DarkGray)
@@ -111,6 +114,8 @@ class View(model: Model, controller: Controller) {
       var choosenSourcePropertyStr = StringProperty("")
       
       lazy val userNameInput = new TextField() {
+        maxWidth = 500
+        font = Font(40)
         promptText = "Your Name"
         alignment = Pos.Center
       }
@@ -202,7 +207,7 @@ class View(model: Model, controller: Controller) {
           }
         },
         new Button {
-          text = "Return to Menu"
+          text = "Return to main menu"
           prefWidth = 500
           font = new Font(20)
           alignment = Pos.Center
@@ -214,7 +219,7 @@ class View(model: Model, controller: Controller) {
     }
   }
     
-  val menuScene = new Scene {
+  val menuScene : Scene = new Scene {
     fill = Color.White
     root = new VBox {
       alignment = Pos.Center
@@ -222,9 +227,9 @@ class View(model: Model, controller: Controller) {
       padding = Insets(100)
       children = List (
         new Text {
-          text = "-----QUIZ-----"
+          text = "-QUIZ-"
           alignment = Pos.Center
-          style = "-fx-font: normal bold 75pt sans-serif"
+          style = "-fx-font: normal bold 100pt sans-serif"
           fill = new LinearGradient (
             endX = 0,
             stops = Stops(White, DarkGray)
@@ -249,18 +254,33 @@ class View(model: Model, controller: Controller) {
           prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
+          onAction = (e: ActionEvent) => {
+            var newGame: Game = Game(new Player("Abcd"), new OpenTDB())
+            var newGameSave: Gamesave = Gamesave(newGame)
+            controller.gamesaveManager.addGamesave(newGameSave)
+            controller.gamesaveList() = controller.gamesaveManager.getGamesaveString()
+            controller.changeScene(loadGameScene)
+          }
         },
         new Button {
           text = "Leaderboards"
           prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
+          onAction = (e: ActionEvent) => {
+            controller.highscoreManager.addScore(new Score(50, "abc"))
+            controller.highscoreString() = controller.highscoreManager.getHighscoreString()
+            controller.changeScene(leaderboardScene)
+          }
         },
         new Button {
           text = "Settings"
           prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
+          onAction = (e: ActionEvent) => {
+            controller.changeScene(settingsScene)
+          }
         },
         new Button {
           text = "Quit"
@@ -286,9 +306,9 @@ class View(model: Model, controller: Controller) {
       spacing = 100
       children = List (
         new Text {
-          text = "-----QUIZ-----"
+          text = "-QUIZ-"
           alignment = Pos.Center
-          style = "-fx-font: normal bold 150pt sans-serif"
+          style = "-fx-font: normal bold 100pt sans-serif"
           fill = new LinearGradient (
             endX = 0,
             stops = Stops(White, DarkGray)
@@ -308,8 +328,85 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  val continueGameScene = new Scene()
-  val leaderboardScene = new Scene()
-  val settingScene = new Scene()
+  val loadGameScene = new Scene {
+    fill = Color.White
+
+    var scrollpane = new ScrollPane() {
+      maxWidth = 1000
+      prefWidth = 1000
+      maxHeight = 600
+      prefHeight = 600
+      padding = Insets(25)
+      content = new Text {
+        text <== controller.gamesaveList
+        fill = Color.Black
+        font = Font.font(40)
+      }
+    }
+
+    root = new VBox {
+      alignment = Pos.Center
+      spacing = 100
+      padding = Insets(100)
+      children = List (
+        new Text {
+          text = "Saved games"
+          alignment = Pos.Center
+          style = "-fx-font: normal bold 80pt sans-serif"
+          fill = Color.Black
+        },
+        scrollpane
+        ,
+        new Button {
+          text = "Return to main menu"
+          prefWidth = 350
+          font = Font.font(25)
+          alignment = Pos.BottomCenter
+          onAction = (e: ActionEvent) => {
+            controller.changeScene(menuScene)
+          }
+        }
+      )
+    }
+  }
+
+
+  val leaderboardScene = new Scene {
+    fill = Color.White
+    val scrollPane = new ScrollPane() {
+      maxWidth = 1000
+      padding = Insets(25)
+      content = new Text {
+          text <== controller.highscoreString
+          fill = Color.Black
+          font = Font.font(40)
+      }
+    }
+
+    root = new VBox {
+      alignment = Pos.Center
+      spacing = 100
+      padding = Insets(100)
+      children = List (
+        new Text {
+          text = "Highscores"
+          style = "-fx-font: normal bold 80pt sans-serif"
+          fill = Color.Black
+        },
+        scrollPane,
+        new Button {
+          text = "Return to main menu"
+          prefWidth = 350
+          font = Font.font(25)
+          alignment = Pos.BottomCenter
+          onAction = (e: ActionEvent) => {
+            controller.changeScene(menuScene)
+          }
+        }
+      )
+    }
+  }
+
+  val settingsScene = new Scene()
 
 }
