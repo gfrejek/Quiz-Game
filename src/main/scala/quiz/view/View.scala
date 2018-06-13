@@ -22,6 +22,7 @@ import scalafx.event.ActionEvent
 import scalafx.beans.property.StringProperty
 import quiz.generators.QuestionGenerator
 import scalafx.scene.canvas.Canvas
+import scalafx.scene.layout.GridPane
 
 
 class View(model: Model, controller: Controller) {
@@ -45,59 +46,146 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  // STUB
+  lazy val concludeGameScene: Scene = new Scene() {
+    fill = Color.White
+    root = new VBox {
+      alignment = Pos.Center
+      spacing = 200
+      padding = Insets(200)
+      children = List (
+        new Text {
+          text = "GAME OVER"
+          font = new Font(40)
+          alignment = Pos.Center
+        },
+        new Text {
+          text = "Your final score:"
+          font = new Font(35)
+          alignment = Pos.Center
+        },
+        new Text {
+          text <== controller.scoreStr
+          font = new Font(35)
+          alignment = Pos.Center
+        },
+        new Button {
+          text = "Return to main menu"
+          prefWidth = 500
+          font = new Font(20)
+          alignment = Pos.Center
+          onAction = (e: ActionEvent) => { 
+            controller.changeScene(menuScene)
+          }
+        }
+      )
+    }
+  }
+  
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
     root = new VBox {
-      alignment = Pos.TopCenter
-      // spacing = 150
-      // padding = Insets(150)
+      alignment = Pos.Center
+      spacing = 200
+      padding = Insets(200)
       children = List (
         new HBox {
-          alignment = Pos.TopCenter
-          spacing = 700
-          padding = Insets(700)
+          alignment = Pos.Center
+          spacing = 200
           children = List (
-            new HBox {
+            new Text {
+              text = "SCORE: "
+              font = new Font(30)
               alignment = Pos.Center
-              children = List (
-                new Text {
-                  text = "Question "
-                  alignment = Pos.Center
-                },
-                new Text {
-                  text <== controller.currentGame.currentQuestion.asString()
-                  alignment = Pos.Center
-                },
-                new Text {
-                  text = "/" + controller.currentGame.numberOfQuestions
-                  alignment = Pos.Center
-                }
-              )
             },
-            new HBox {
+            new Text {
+              text <== controller.scoreStr
+              font = new Font(30)
               alignment = Pos.Center
-              children = List (
-                new Text {
-                  text = "Time: 00:05"
-                  alignment = Pos.Center
-                }
-              )
             },
-            new HBox {
+            new Text {
+              text = "PROGRES (OF 12): "
+              font = new Font(30)
               alignment = Pos.Center
-              children = List (
-                new Text {
-                  text = "Score: "
-                  alignment = Pos.Center
-                },
-                new Text {
-                  text <== controller.currentGame.score.asString()
-                  alignment = Pos.Center
-                }
-              )
+            },
+            new Text {
+              text <== controller.progressStr
+              font = new Font(30)
+              alignment = Pos.Center
             }
           )
+        },
+        new Text {
+          text <== controller.questionContents
+          alignment = Pos.Center
+          font = new Font(30)
+        },
+        new GridPane {
+          alignment = Pos.Center
+          val button1 = new Button {
+            text <== controller.choiceA
+            alignmentInParent = Pos.BaselineRight
+            prefWidth = 600
+            prefHeight = 50
+            minHeight = 50
+            maxHeight = 50
+            font = new Font(25)
+            onAction = (e: ActionEvent) => {
+              if (controller.respondToUserChoice(controller.choiceA(), 1)) {
+                controller.changeScene(concludeGameScene)
+              }
+            }
+          }
+          val button2 = new Button {
+            text <== controller.choiceB
+            alignmentInParent = Pos.BaselineLeft
+            prefWidth = 600
+            prefHeight = 50
+            minHeight = 50
+            maxHeight = 50
+            font = new Font(25)
+            onAction = (e: ActionEvent) => {
+              if (controller.respondToUserChoice(controller.choiceB(), 1)) {
+                controller.changeScene(concludeGameScene)
+              }
+            }
+          }
+          val button3 = new Button {
+            text <== controller.choiceC
+            alignmentInParent = Pos.BaselineRight
+            prefWidth = 600
+            prefHeight = 50
+            minHeight = 50
+            maxHeight = 50
+            font = new Font(25)
+            onAction = (e: ActionEvent) => {
+              if (controller.respondToUserChoice(controller.choiceC(), 1)) {
+                controller.changeScene(concludeGameScene)
+              }
+            }
+          }
+          val button4 = new Button {
+            text <== controller.choiceD
+            alignmentInParent = Pos.BaselineLeft
+            prefWidth = 600
+            prefHeight = 50
+            minHeight = 50
+            maxHeight = 50
+            font = new Font(25)
+            onAction = (e: ActionEvent) => {
+              if (controller.respondToUserChoice(controller.choiceD(), 1)) {
+                controller.changeScene(concludeGameScene)
+              }
+            }
+          }
+
+          GridPane.setConstraints(button1, 0, 0)
+          GridPane.setConstraints(button2, 0, 1)
+          GridPane.setConstraints(button3, 1, 0)
+          GridPane.setConstraints(button4, 1, 1)
+
+          padding = Insets(100)
+
+          children ++= Seq(button1, button2, button3, button4)
         }
       )
     }
@@ -255,9 +343,6 @@ class View(model: Model, controller: Controller) {
           font = new Font(20)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => {
-            var newGame: Game = Game(new Player("Abcd"), new OpenTDB())
-            var newGameSave: Gamesave = Gamesave(newGame)
-            controller.gamesaveManager.addGamesave(newGameSave)
             controller.gamesaveList() = controller.gamesaveManager.getGamesaveString()
             controller.changeScene(loadGameScene)
           }
@@ -268,7 +353,6 @@ class View(model: Model, controller: Controller) {
           font = new Font(20)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => {
-            controller.highscoreManager.addScore(new Score(50, "abc"))
             controller.highscoreString() = controller.highscoreManager.getHighscoreString()
             controller.changeScene(leaderboardScene)
           }
@@ -332,10 +416,10 @@ class View(model: Model, controller: Controller) {
     fill = Color.White
 
     var scrollpane = new ScrollPane() {
-      maxWidth = 1000
-      prefWidth = 1000
-      maxHeight = 600
-      prefHeight = 600
+      maxWidth = 1500
+      prefWidth = 1500
+      maxHeight = 800
+      prefHeight = 800
       padding = Insets(25)
       content = new Text {
         text <== controller.gamesaveList
@@ -352,11 +436,10 @@ class View(model: Model, controller: Controller) {
         new Text {
           text = "Saved games"
           alignment = Pos.Center
-          style = "-fx-font: normal bold 80pt sans-serif"
+          style = "-fx-font: normal bold 60pt sans-serif"
           fill = Color.Black
         },
-        scrollpane
-        ,
+        scrollpane,
         new Button {
           text = "Return to main menu"
           prefWidth = 350
@@ -374,7 +457,10 @@ class View(model: Model, controller: Controller) {
   val leaderboardScene = new Scene {
     fill = Color.White
     val scrollPane = new ScrollPane() {
-      maxWidth = 1000
+      maxWidth = 1500
+      prefWidth = 1500
+      maxHeight = 800
+      prefHeight = 800
       padding = Insets(25)
       content = new Text {
           text <== controller.highscoreString
@@ -390,7 +476,7 @@ class View(model: Model, controller: Controller) {
       children = List (
         new Text {
           text = "Highscores"
-          style = "-fx-font: normal bold 80pt sans-serif"
+          style = "-fx-font: normal bold 60pt sans-serif"
           fill = Color.Black
         },
         scrollPane,

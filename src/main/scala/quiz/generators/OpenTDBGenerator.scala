@@ -44,7 +44,15 @@ object OpenTDBGenerator extends Generator {
         result = None
       }
     }
-    result
+    result match {
+      case Some(res) => {
+        for (r <- res) {
+          r.question = r.question.replaceAll("&quot;", "\"")
+        }
+        Some(res)
+      }
+      case None => None
+    }
   }
 
 }
