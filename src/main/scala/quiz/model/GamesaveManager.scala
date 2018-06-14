@@ -52,6 +52,10 @@ class GamesaveManager {
     updateGamesaveFile()
   }
 
+  def reset() = {
+    new File(gamesaveFilePath).delete()
+  }
+
   def getGamesaveString() = {
     loadGamesaveFile()
     var result = StringBuilder.newBuilder

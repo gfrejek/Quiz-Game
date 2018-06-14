@@ -48,45 +48,55 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  lazy val concludeGameScene: Scene = new Scene() {
-    fill = Color.White
-    root = new VBox {
-      alignment = Pos.Center
-      spacing = 200
-      padding = Insets(200)
-      children = List (
-        smallLogo,
-        new Text {
-          text = "GAME OVER"
-          font = new Font(40)
-          alignment = Pos.Center
-        },
-        new Text {
-          text = "Your final score:"
-          font = new Font(35)
-          alignment = Pos.Center
-        },
-        new Text {
-          text <== controller.scoreStr
-          font = new Font(35)
-          alignment = Pos.Center
-        },
-        new Button {
-          text = "Return to main menu"
-          prefWidth = 500
-          font = new Font(20)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => { 
-            controller.changeScene(menuScene)
+  def refreshConcludeGameScene(): Scene = {
+    new Scene() {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 150
+        padding = Insets(150)
+        children = List (
+          smallLogo,
+          new Text {
+            text = "GAME OVER"
+            font = new Font(40)
+            alignment = Pos.Center
+          },
+          new Text {
+            text = "Your final score:"
+            font = new Font(35)
+            alignment = Pos.Center
+          },
+          new Text {
+            text <== controller.scoreStr
+            font = new Font(35)
+            alignment = Pos.Center
+          },
+          new Button {
+            text = "Return to main menu"
+            prefWidth = 500
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => { 
+              controller.changeScene(refreshMenuScene())
+            }
           }
-        }
-      )
+        )
+      }
     }
   }
   
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
     root = new VBox {
+      maxWidth = 1920
+      prefWidth = 1920
+      maxHeight = 1080
+      prefHeight = 1080
       alignment = Pos.Center
       spacing = 200
       padding = Insets(200)
@@ -134,7 +144,7 @@ class View(model: Model, controller: Controller) {
             font = new Font(25)
             onAction = (e: ActionEvent) => {
               if (controller.respondToUserChoice(controller.choiceA(), 1)) {
-                controller.changeScene(concludeGameScene)
+                controller.changeScene(refreshConcludeGameScene())
               }
             }
           }
@@ -148,7 +158,7 @@ class View(model: Model, controller: Controller) {
             font = new Font(25)
             onAction = (e: ActionEvent) => {
               if (controller.respondToUserChoice(controller.choiceB(), 1)) {
-                controller.changeScene(concludeGameScene)
+                controller.changeScene(refreshConcludeGameScene())
               }
             }
           }
@@ -162,7 +172,7 @@ class View(model: Model, controller: Controller) {
             font = new Font(25)
             onAction = (e: ActionEvent) => {
               if (controller.respondToUserChoice(controller.choiceC(), 1)) {
-                controller.changeScene(concludeGameScene)
+                controller.changeScene(refreshConcludeGameScene())
               }
             }
           }
@@ -176,7 +186,7 @@ class View(model: Model, controller: Controller) {
             font = new Font(25)
             onAction = (e: ActionEvent) => {
               if (controller.respondToUserChoice(controller.choiceD(), 1)) {
-                controller.changeScene(concludeGameScene)
+                controller.changeScene(refreshConcludeGameScene())
               }
             }
           }
@@ -194,187 +204,199 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  lazy val newGameScene : Scene = new Scene {
-    fill = Color.White
-    root = new VBox {
-      alignment = Pos.Center
-      spacing = 40
-      padding = Insets(40)
-
-      var choosenSource: QuestionsSource = _
-      var choosenSourcePropertyStr = StringProperty("")
-      
-      lazy val userNameInput = new TextField() {
-        maxWidth = 500
-        font = Font(40)
-        promptText = "Your Name"
+  def refreshNewGameScene(): Scene = {
+    new Scene {
+      fill = Color.White
+      root = new VBox {
         alignment = Pos.Center
-      }
-      
-      val openTDBButton = new Button {
-        text = "General"
-        prefWidth = 300
-        font = new Font(20)
-        alignment = Pos.Center
-      }
-      val theSportsDBButton = new Button {
-        text = "Sports"
-        prefWidth = 300
-        font = new Font(20)
-        alignment = Pos.Center
-      }
-      val numbersAPIButton = new Button {
-        text = "Numbers"
-        prefWidth = 300
-        font = new Font(20)
-        alignment = Pos.Center
-      }
-
-      openTDBButton.onAction = (e: ActionEvent) => {
-        choosenSource = QuestionsSource.openTDB
-        openTDBButton.disable = true
-        theSportsDBButton.disable = false
-        numbersAPIButton.disable = false
-        choosenSourcePropertyStr() = "General"
-      }
-      theSportsDBButton.onAction = (e: ActionEvent) => {
-        choosenSource = QuestionsSource.theSportsDB
-        openTDBButton.disable = false
-        theSportsDBButton.disable = true
-        numbersAPIButton.disable = false
-        choosenSourcePropertyStr() = "Sports"
-      }
-      numbersAPIButton.onAction = (e: ActionEvent) => {
-        choosenSource = QuestionsSource.numbersAPI
-        openTDBButton.disable = false
-        theSportsDBButton.disable = false
-        numbersAPIButton.disable = true
-        choosenSourcePropertyStr() = "Numbers"
-      }
-
-      children = List (
-        smallLogo,
-        new Text {
-          text = "New Game"
+        spacing = 40
+        padding = Insets(40)
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+  
+        var choosenSource: QuestionsSource = _
+        var choosenSourcePropertyStr = StringProperty("")
+        
+        lazy val userNameInput = new TextField() {
+          maxWidth = 500
+          font = Font(40)
+          promptText = "Your Name"
           alignment = Pos.Center
-          style = "-fx-font: normal bold 50pt sans-serif" 
-        },
-        new Text {
-          text = "Please provide a name and choose a category"
-          alignment = Pos.Center
-          style = "-fx-font: normal bold 35pt sans-serif"
-        },
-        userNameInput,
-        new HBox {
-          alignment = Pos.Center
-          spacing = 100
-          padding = Insets(100)
-          children = List (
-            openTDBButton,
-            theSportsDBButton,
-            numbersAPIButton
-          )
-        },
-        new Text {
-          text = "Choosen category:"
-          alignment = Pos.Center
-          font = new Font(15)
-        },
-        new Text {
-          text <== choosenSourcePropertyStr
-          alignment = Pos.Center
-          font = new Font(15)
-        },
-        new Button {
-          text = "Start Game"
-          prefWidth = 400
-          font = new Font(25)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => { 
-            if (choosenSourcePropertyStr() != "" && userNameInput.text() != "") {
-              controller.startNewGame(Player(userNameInput.text()), choosenSource)
-              controller.changeScene(gameScene)
-            }
-          }
-        },
-        new Button {
-          text = "Return to main menu"
-          prefWidth = 500
+        }
+        
+        val openTDBButton = new Button {
+          text = "General"
+          prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
-          onAction = (e: ActionEvent) => { 
-            controller.changeScene(menuScene)
-          }
         }
-      )
+        val theSportsDBButton = new Button {
+          text = "Sports"
+          prefWidth = 300
+          font = new Font(20)
+          alignment = Pos.Center
+        }
+        val numbersAPIButton = new Button {
+          text = "Numbers"
+          prefWidth = 300
+          font = new Font(20)
+          alignment = Pos.Center
+        }
+  
+        openTDBButton.onAction = (e: ActionEvent) => {
+          choosenSource = QuestionsSource.openTDB
+          openTDBButton.disable = true
+          theSportsDBButton.disable = false
+          numbersAPIButton.disable = false
+          choosenSourcePropertyStr() = "General"
+        }
+        theSportsDBButton.onAction = (e: ActionEvent) => {
+          choosenSource = QuestionsSource.theSportsDB
+          openTDBButton.disable = false
+          theSportsDBButton.disable = true
+          numbersAPIButton.disable = false
+          choosenSourcePropertyStr() = "Sports"
+        }
+        numbersAPIButton.onAction = (e: ActionEvent) => {
+          choosenSource = QuestionsSource.numbersAPI
+          openTDBButton.disable = false
+          theSportsDBButton.disable = false
+          numbersAPIButton.disable = true
+          choosenSourcePropertyStr() = "Numbers"
+        }
+  
+        children = List (
+          smallLogo,
+          new Text {
+            text = "New Game"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 50pt sans-serif" 
+          },
+          new Text {
+            text = "Please provide a name and choose a category"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 35pt sans-serif"
+          },
+          userNameInput,
+          new HBox {
+            alignment = Pos.Center
+            spacing = 100
+            padding = Insets(100)
+            children = List (
+              openTDBButton,
+              theSportsDBButton,
+              numbersAPIButton
+            )
+          },
+          new Text {
+            text = "Choosen category:"
+            alignment = Pos.Center
+            font = new Font(15)
+          },
+          new Text {
+            text <== choosenSourcePropertyStr
+            alignment = Pos.Center
+            font = new Font(15)
+          },
+          new Button {
+            text = "Start Game"
+            prefWidth = 400
+            font = new Font(25)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => { 
+              if (choosenSourcePropertyStr() != "" && userNameInput.text() != "") {
+                controller.startNewGame(Player(userNameInput.text()), choosenSource)
+                controller.changeScene(gameScene)
+              }
+            }
+          },
+          new Button {
+            text = "Return to main menu"
+            prefWidth = 500
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => { 
+              controller.changeScene(refreshMenuScene())
+            }
+          }
+        )
+      }
     }
   }
     
-  val menuScene : Scene = new Scene {
-    fill = Color.White
-    root = new VBox {
-      alignment = Pos.Center
-      spacing = 100
-      padding = Insets(100)
-      children = List (
-        new Text {
-          text = "-QUIZ-"
-          alignment = Pos.Center
-          style = "-fx-font: normal bold 100pt sans-serif"
-          fill = new LinearGradient (
-            endX = 0,
-            stops = Stops(White, DarkGray)
-          )
-          effect = new DropShadow {
-            color = DarkGray
-            radius = 15
-            spread = 0.25
+  def refreshMenuScene(): Scene = {
+    new Scene {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          new Text {
+            text = "-QUIZ-"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 100pt sans-serif"
+            fill = new LinearGradient (
+              endX = 0,
+              stops = Stops(White, DarkGray)
+            )
+            effect = new DropShadow {
+              color = DarkGray
+              radius = 15
+              spread = 0.25
+            }
+          },
+          new Button {
+            text = "New Game"
+            prefWidth = 300
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => { 
+              controller.changeScene(refreshNewGameScene())
+            }
+          },
+          new Button {
+            text = "Load Game"
+            prefWidth = 300
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshLoadGameScene())
+            }
+          },
+          new Button {
+            text = "Leaderboards"
+            prefWidth = 300
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshHighScoreScene())
+            }
+          },
+          new Button {
+            text = "Settings"
+            prefWidth = 300
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshSettingsScene())
+            }
+          },
+          new Button {
+            text = "Quit"
+            prefWidth = 300
+            font = new Font(20)
+            alignment = Pos.Center
+            onAction = (e: ActionEvent) => { controller.closeStage() }
           }
-        },
-        new Button {
-          text = "New Game"
-          prefWidth = 300
-          font = new Font(20)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => { 
-            controller.changeScene(newGameScene)
-          }
-        },
-        new Button {
-          text = "Load Game"
-          prefWidth = 300
-          font = new Font(20)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => {
-            controller.changeScene(refreshLoadGameScene())
-          }
-        },
-        new Button {
-          text = "Leaderboards"
-          prefWidth = 300
-          font = new Font(20)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => {
-            controller.changeScene(refreshHighScoreScene())
-          }
-        },
-        new Button {
-          text = "Settings"
-          prefWidth = 300
-          font = new Font(20)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => {
-            controller.changeScene(settingsScene)
-          }
-        },
-        new Button {
-          text = "Quit"
-          prefWidth = 300
-          font = new Font(20)
-          alignment = Pos.Center
-          onAction = (e: ActionEvent) => { controller.closeStage() }
-        }
-      )
+        )
+      }
     }
   }
     
@@ -382,13 +404,18 @@ class View(model: Model, controller: Controller) {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
       case KeyCode.Enter => {
-        controller.changeScene(menuScene)
+        controller.changeScene(refreshMenuScene())
       }
       case _ =>
     }
     root = new VBox {
-      padding = Insets(50, 80, 50, 80)
+      maxWidth = 1920
+      prefWidth = 1920
+      maxHeight = 1080
+      prefHeight = 1080
+      padding = Insets(100)
       spacing = 100
+      alignment = Pos.Center
       children = List (
         new Text {
           text = "-QUIZ-"
@@ -439,6 +466,10 @@ class View(model: Model, controller: Controller) {
       }
   
       root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
         alignment = Pos.Center
         spacing = 60
         padding = Insets(60)
@@ -456,7 +487,7 @@ class View(model: Model, controller: Controller) {
             font = Font.font(25)
             alignment = Pos.BottomCenter
             onAction = (e: ActionEvent) => {
-              controller.changeScene(menuScene)
+              controller.changeScene(refreshMenuScene())
             }
           }
         )
@@ -464,30 +495,54 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  lazy val settingsScene = new Scene {
-    fill = Color.White
-    root = new VBox {
-      alignment = Pos.Center
-      spacing = 400
-      padding = Insets(400)
-      children = List (
-        smallLogo,
-        new Text {
-          text = "Settings"
-          alignment = Pos.Center
-          style = "-fx-font: normal bold 50pt sans-serif"
-          fill = Color.Black
-        },
-        new Button {
-          text = "Return to main menu"
-          prefWidth = 350
-          font = Font.font(25)
-          alignment = Pos.BottomCenter
-          onAction = (e: ActionEvent) => {
-            controller.changeScene(menuScene)
+  def refreshSettingsScene(): Scene = {
+    new Scene {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          smallLogo,
+          new Text {
+            text = "Settings"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 50pt sans-serif"
+            fill = Color.Black
+          },
+          new Button {
+            text = "Erase All Saves"
+            prefWidth = 350
+            font = Font.font(25)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.gamesaveManager.reset()
+            }
+          },
+          new Button {
+            text = "Reset HighScores"
+            prefWidth = 350
+            font = Font.font(25)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.highscoreManager.reset()
+            }
+          },
+          new Button {
+            text = "Return to main menu"
+            prefWidth = 350
+            font = Font.font(25)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshMenuScene())
+            }
           }
-        }
-      )
+        )
+      }
     }
   }
 
@@ -542,6 +597,10 @@ class View(model: Model, controller: Controller) {
       }
 
       root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
         alignment = Pos.Center
         spacing = 60
         padding = Insets(60)
@@ -560,7 +619,7 @@ class View(model: Model, controller: Controller) {
             font = Font.font(25)
             alignment = Pos.BottomCenter
             onAction = (e: ActionEvent) => {
-              controller.changeScene(menuScene)
+              controller.changeScene(refreshMenuScene())
             }
           }
         )

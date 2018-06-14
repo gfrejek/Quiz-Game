@@ -49,6 +49,10 @@ class HighscoreManager() {
     updateScoreFile()
   }
 
+  def reset() = {
+    new File(highscorefilePath).delete()
+  }
+
   def getHighscoreString() = {
     var result = StringBuilder.newBuilder
     loadScoreFile()
