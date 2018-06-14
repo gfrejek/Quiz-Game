@@ -30,8 +30,8 @@ import scalafx.collections.ObservableBuffer
 class View(model: Model, controller: Controller) {
 
   val bounds = Screen.primary.bounds
-  val x_mid = bounds.minX + bounds.width / 2 - controller.config.getInt("width") / 2
-  val y_mid = bounds.minY + bounds.height / 2 - controller.config.getInt("height") / 2
+  val x_mid = bounds.minX + bounds.width / 2 - 1920 / 2
+  val y_mid = bounds.minY + bounds.height / 2 - 1080 / 2
 
 
   val smallLogo = new Text {
@@ -541,7 +541,7 @@ class View(model: Model, controller: Controller) {
           },
           new Button {
             text = "Return to main menu"
-            prefWidth = 350
+            prefWidth = 500
             font = Font.font(25)
             alignment = Pos.BottomCenter
             onAction = (e: ActionEvent) => {
