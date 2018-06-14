@@ -23,7 +23,7 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
 
   def display(): String = {
     var result = StringBuilder.newBuilder
-    result.append(player)
+    result.append(player.name)
     result.append("\t")
     result.append(score)
     result.append("\t")
@@ -44,7 +44,4 @@ object Gamesave {
     new Gamesave(game.player, game.score(), game.currentQuestion(), game.numberOfQuestions, Calendar.getInstance().getTime, game.data)
   }
 
-  def apply(name: String, score: Int, currQuest: Int, noQuests: Int, date: Date , data: QuestionsSource) = {
-    new Gamesave(Player(name), score, currQuest, noQuests, date, data)
-  }
 }

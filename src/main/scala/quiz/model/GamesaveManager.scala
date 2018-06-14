@@ -9,7 +9,7 @@ class GamesaveManager {
 
   var gamesaveList: mutable.MutableList[Gamesave] = new mutable.MutableList[Gamesave]
   val gamesaveFile = "gamesaves.sav"
-  val gamesaveFilePath = s"data\\$gamesaveFile" // TODO adjust "/" to linux
+  val gamesaveFilePath = s"data\\$gamesaveFile"
 
   def loadGamesaveFile() = {
     try{
@@ -61,7 +61,7 @@ class GamesaveManager {
       result.append(gamesave.score)
       result.append("\t")
       result.append(gamesave.currentQuestion + "/" + gamesave.numberOfQuestions)
-      result.append("\t\t")
+      result.append("\t")
       val sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
       val strDate = sdfDate.format(gamesave.date)
       result.append(strDate.toString)

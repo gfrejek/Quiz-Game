@@ -10,9 +10,9 @@ class HighscoreManager() {
 
   var scoreList: mutable.MutableList[Score] = new mutable.MutableList[Score]
   val highScoreFile = "scores.dat"
-  val highscorefilePath = s"data\\$highScoreFile"  //TODO adjust "/" to linux
+  val highscorefilePath = s"data\\$highScoreFile"
 
-  private def loadScoreFile() = {
+  def loadScoreFile() = {
     try{
       val inputStream = new ObjectInputStream(new FileInputStream(highscorefilePath))
       scoreList = inputStream.readObject().asInstanceOf[mutable.MutableList[Score]]

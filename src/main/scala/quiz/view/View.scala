@@ -55,6 +55,7 @@ class View(model: Model, controller: Controller) {
       spacing = 200
       padding = Insets(200)
       children = List (
+        smallLogo,
         new Text {
           text = "GAME OVER"
           font = new Font(40)
@@ -211,19 +212,19 @@ class View(model: Model, controller: Controller) {
       }
       
       val openTDBButton = new Button {
-        text = "OpenTDB"
+        text = "General"
         prefWidth = 300
         font = new Font(20)
         alignment = Pos.Center
       }
       val theSportsDBButton = new Button {
-        text = "theSportsDB"
+        text = "Sports"
         prefWidth = 300
         font = new Font(20)
         alignment = Pos.Center
       }
       val numbersAPIButton = new Button {
-        text = "NumbersAPI"
+        text = "Numbers"
         prefWidth = 300
         font = new Font(20)
         alignment = Pos.Center
@@ -234,21 +235,21 @@ class View(model: Model, controller: Controller) {
         openTDBButton.disable = true
         theSportsDBButton.disable = false
         numbersAPIButton.disable = false
-        choosenSourcePropertyStr() = "OpenTDB"
+        choosenSourcePropertyStr() = "General"
       }
       theSportsDBButton.onAction = (e: ActionEvent) => {
         choosenSource = QuestionsSource.theSportsDB
         openTDBButton.disable = false
         theSportsDBButton.disable = true
         numbersAPIButton.disable = false
-        choosenSourcePropertyStr() = "theSportsDB"
+        choosenSourcePropertyStr() = "Sports"
       }
       numbersAPIButton.onAction = (e: ActionEvent) => {
         choosenSource = QuestionsSource.numbersAPI
         openTDBButton.disable = false
         theSportsDBButton.disable = false
         numbersAPIButton.disable = true
-        choosenSourcePropertyStr() = "NumbersAPI"
+        choosenSourcePropertyStr() = "Numbers"
       }
 
       children = List (
@@ -259,7 +260,7 @@ class View(model: Model, controller: Controller) {
           style = "-fx-font: normal bold 50pt sans-serif" 
         },
         new Text {
-          text = "Please provide a name and choose a data source"
+          text = "Please provide a name and choose a category"
           alignment = Pos.Center
           style = "-fx-font: normal bold 35pt sans-serif"
         },
@@ -275,7 +276,7 @@ class View(model: Model, controller: Controller) {
           )
         },
         new Text {
-          text = "Choosen data source:"
+          text = "Choosen category:"
           alignment = Pos.Center
           font = new Font(15)
         },
@@ -354,8 +355,7 @@ class View(model: Model, controller: Controller) {
           font = new Font(20)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => {
-            controller.highscoreString() = controller.highscoreManager.getHighscoreString()
-            controller.changeScene(leaderboardScene)
+            controller.changeScene(refreshHighScoreScene())
           }
         },
         new Button {
@@ -413,32 +413,71 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  val leaderboardScene = new Scene {
-    fill = Color.White
-    val scrollPane = new ScrollPane() {
-      maxWidth = 1500
-      prefWidth = 1500
-      maxHeight = 800
-      prefHeight = 800
-      padding = Insets(25)
-      content = new Text {
-          text <== controller.highscoreString
-          fill = Color.Black
-          font = Font.font(40)
+  def refreshHighScoreScene(): Scene = {
+    controller.highscoreManager.loadScoreFile()
+    
+    new Scene {
+      fill = Color.White
+      val scrollPane = new ScrollPane() {
+        maxWidth = 800
+        prefWidth = 800
+        maxHeight = 800
+        prefHeight = 800
+        padding = Insets(25)
+        content = new VBox {
+          alignment = Pos.Center
+          children = {
+            for (hs <- controller.highscoreManager.scoreList) yield
+              new Text {
+                text = hs.display
+                font = new Font(20)
+                wrappingWidth = 700
+                alignment = Pos.Center
+              }
+          }
+        }
+      }
+  
+      root = new VBox {
+        alignment = Pos.Center
+        spacing = 60
+        padding = Insets(60)
+        children = List (
+          smallLogo,
+          new Text {
+            text = "Highscores"
+            style = "-fx-font: normal bold 50pt sans-serif"
+            fill = Color.Black
+          },
+          scrollPane,
+          new Button {
+            text = "Return to main menu"
+            prefWidth = 350
+            font = Font.font(25)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(menuScene)
+            }
+          }
+        )
       }
     }
+  }
 
+  lazy val settingsScene = new Scene {
+    fill = Color.White
     root = new VBox {
       alignment = Pos.Center
-      spacing = 100
-      padding = Insets(100)
+      spacing = 400
+      padding = Insets(400)
       children = List (
+        smallLogo,
         new Text {
-          text = "Highscores"
-          style = "-fx-font: normal bold 60pt sans-serif"
+          text = "Settings"
+          alignment = Pos.Center
+          style = "-fx-font: normal bold 50pt sans-serif"
           fill = Color.Black
         },
-        scrollPane,
         new Button {
           text = "Return to main menu"
           prefWidth = 350
@@ -452,17 +491,11 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  val settingsScene = new Scene {
-
-  }
-
   def refreshLoadGameScene(): Scene = {
-    //controller.gamesaveManager.loadGamesaveFile()
-    controller.gamesaveManager.addGamesave(Gamesave("Kekasdasdasdasdasdasdsd", 2000, 5, 12, Calendar.getInstance().getTime, QuestionsSource.openTDB))
+    controller.gamesaveManager.loadGamesaveFile()
 
     new Scene {
       fill = Color.White
-      
       val saveList = new ScrollPane {
         maxWidth = 1500
         prefWidth = 1500
@@ -471,11 +504,11 @@ class View(model: Model, controller: Controller) {
         padding = Insets(25)
         content = new VBox {children = for (save <- controller.gamesaveManager.gamesaveList) yield
           new HBox {
-            spacing = 700
+            spacing = 500
             children = List (
               new Text {
                 text = save.display
-                wrappingWidth = 500
+                wrappingWidth = 700
                 alignment = Pos.CenterLeft
                 alignmentInParent = Pos.CenterLeft
               },
@@ -510,13 +543,14 @@ class View(model: Model, controller: Controller) {
 
       root = new VBox {
         alignment = Pos.Center
-        spacing = 100
-        padding = Insets(100)
+        spacing = 60
+        padding = Insets(60)
         children = List (
+          smallLogo,
           new Text {
             text = "Saved games"
             alignment = Pos.Center
-            style = "-fx-font: normal bold 60pt sans-serif"
+            style = "-fx-font: normal bold 50pt sans-serif"
             fill = Color.Black
           },
           saveList,
