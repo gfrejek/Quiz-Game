@@ -41,7 +41,7 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
 object Gamesave {
 
   def apply(game: Game) = {
-    new Gamesave(game.player, game.score(), game.currentQuestion(), game.numberOfQuestions, Calendar.getInstance().getTime, game.data)
+    new Gamesave(game.player, game.score(), game.currentQuestion() - 1, game.numberOfQuestions, Calendar.getInstance().getTime, game.data)
   }
 
 }

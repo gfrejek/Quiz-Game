@@ -9,7 +9,7 @@ class GamesaveManager {
 
   var gamesaveList: mutable.MutableList[Gamesave] = new mutable.MutableList[Gamesave]
   val gamesaveFile = "gamesaves.sav"
-  val gamesaveFilePath = s"data\\$gamesaveFile"
+  val gamesaveFilePath = s"$gamesaveFile"
 
   def loadGamesaveFile() = {
     try{
@@ -19,9 +19,10 @@ class GamesaveManager {
 
     } catch {
       case ex1: FileNotFoundException => {
-        val outputStream = new ObjectOutputStream(new FileOutputStream(gamesaveFilePath))
-        outputStream.writeObject(gamesaveList)
-        outputStream.close()    // TODO try catch exception
+        // val outputStream = new ObjectOutputStream(new FileOutputStream(gamesaveFilePath))
+        // outputStream.writeObject(gamesaveList)
+        // outputStream.close()    // TODO try catch exception
+        gamesaveList = new mutable.MutableList[Gamesave]()
       }
       case ex: Throwable => {
         println(ex.toString)

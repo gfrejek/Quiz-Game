@@ -92,6 +92,13 @@ class View(model: Model, controller: Controller) {
   
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
+    onKeyPressed = (k: KeyEvent) => k.code match {
+      case KeyCode.Escape => {
+        controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
+        controller.changeScene(refreshMenuScene())
+      }
+      case _ =>
+    }
     root = new VBox {
       maxWidth = 1920
       prefWidth = 1920

@@ -10,7 +10,7 @@ class HighscoreManager() {
 
   var scoreList: mutable.MutableList[Score] = new mutable.MutableList[Score]
   val highScoreFile = "scores.dat"
-  val highscorefilePath = s"data\\$highScoreFile"
+  val highscorefilePath = s"$highScoreFile"
 
   def loadScoreFile() = {
     try{
@@ -20,9 +20,10 @@ class HighscoreManager() {
 
     } catch {
         case ex1: FileNotFoundException => {
-          val outputStream = new ObjectOutputStream(new FileOutputStream(highscorefilePath))
-          outputStream.writeObject(scoreList)
-          outputStream.close()    // TODO try catch exception
+          // val outputStream = new ObjectOutputStream(new FileOutputStream(highscorefilePath))
+          // outputStream.writeObject(scoreList)
+          // outputStream.close()    // TODO try catch exception
+          scoreList = mutable.MutableList[Score]()
         }
         case ex: Throwable => {
           println(ex.toString)
