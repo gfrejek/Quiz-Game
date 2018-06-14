@@ -23,6 +23,8 @@ import scalafx.beans.property.StringProperty
 import quiz.generators.QuestionGenerator
 import scalafx.scene.canvas.Canvas
 import scalafx.scene.layout.GridPane
+import scalafx.scene.control.ListView
+import scalafx.collections.ObservableBuffer
 
 
 class View(model: Model, controller: Controller) {
@@ -343,8 +345,7 @@ class View(model: Model, controller: Controller) {
           font = new Font(20)
           alignment = Pos.Center
           onAction = (e: ActionEvent) => {
-            controller.gamesaveList() = controller.gamesaveManager.getGamesaveString()
-            controller.changeScene(loadGameScene)
+            controller.changeScene(refreshLoadGameScene())
           }
         },
         new Button {
@@ -412,48 +413,6 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  val loadGameScene = new Scene {
-    fill = Color.White
-
-    var scrollpane = new ScrollPane() {
-      maxWidth = 1500
-      prefWidth = 1500
-      maxHeight = 800
-      prefHeight = 800
-      padding = Insets(25)
-      content = new Text {
-        text <== controller.gamesaveList
-        fill = Color.Black
-        font = Font.font(40)
-      }
-    }
-
-    root = new VBox {
-      alignment = Pos.Center
-      spacing = 100
-      padding = Insets(100)
-      children = List (
-        new Text {
-          text = "Saved games"
-          alignment = Pos.Center
-          style = "-fx-font: normal bold 60pt sans-serif"
-          fill = Color.Black
-        },
-        scrollpane,
-        new Button {
-          text = "Return to main menu"
-          prefWidth = 350
-          font = Font.font(25)
-          alignment = Pos.BottomCenter
-          onAction = (e: ActionEvent) => {
-            controller.changeScene(menuScene)
-          }
-        }
-      )
-    }
-  }
-
-
   val leaderboardScene = new Scene {
     fill = Color.White
     val scrollPane = new ScrollPane() {
@@ -493,6 +452,86 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  val settingsScene = new Scene()
+  val settingsScene = new Scene {
+
+  }
+
+  def refreshLoadGameScene(): Scene = {
+    //controller.gamesaveManager.loadGamesaveFile()
+    controller.gamesaveManager.addGamesave(Gamesave("Kekasdasdasdasdasdasdsd", 2000, 5, 12, Calendar.getInstance().getTime, QuestionsSource.openTDB))
+
+    new Scene {
+      fill = Color.White
+      
+      val saveList = new ScrollPane {
+        maxWidth = 1500
+        prefWidth = 1500
+        maxHeight = 800
+        prefHeight = 800
+        padding = Insets(25)
+        content = new VBox {children = for (save <- controller.gamesaveManager.gamesaveList) yield
+          new HBox {
+            spacing = 700
+            children = List (
+              new Text {
+                text = save.display
+                wrappingWidth = 500
+                alignment = Pos.CenterLeft
+                alignmentInParent = Pos.CenterLeft
+              },
+              new HBox {
+                alignmentInParent = Pos.CenterRight
+                alignment = Pos.CenterRight
+                spacing = 20
+                children = List (
+                  new Button {
+                    text = "LOAD"
+                    alignmentInParent = Pos.CenterRight
+                    alignment = Pos.Center
+                    prefWidth = 100
+                    onAction = (e: ActionEvent) => {
+                      val game = save.toGame
+                      controller.continueGame(game)
+                      controller.changeScene(gameScene)
+                    }
+                  },
+                  new Button {
+                    text = "DELETE"
+                    alignmentInParent = Pos.CenterRight
+                    alignment = Pos.Center
+                    prefWidth = 100
+                  }
+                )
+              }
+            )
+          }
+        }
+      }
+
+      root = new VBox {
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          new Text {
+            text = "Saved games"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 60pt sans-serif"
+            fill = Color.Black
+          },
+          saveList,
+          new Button {
+            text = "Return to main menu"
+            prefWidth = 350
+            font = Font.font(25)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(menuScene)
+            }
+          }
+        )
+      }
+    }
+  }
 
 }

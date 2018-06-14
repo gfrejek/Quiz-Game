@@ -11,7 +11,7 @@ class GamesaveManager {
   val gamesaveFile = "gamesaves.sav"
   val gamesaveFilePath = s"data\\$gamesaveFile" // TODO adjust "/" to linux
 
-  private def loadGamesaveFile() = {
+  def loadGamesaveFile() = {
     try{
       val inputStream = new ObjectInputStream(new FileInputStream(gamesaveFilePath))
       gamesaveList = inputStream.readObject().asInstanceOf[mutable.MutableList[Gamesave]]
@@ -29,7 +29,7 @@ class GamesaveManager {
     }
   }
 
-  private def updateGamesaveFile() = {
+  def updateGamesaveFile() = {
     try{
       val outputStream = new ObjectOutputStream(new FileOutputStream(gamesaveFilePath))
       outputStream.writeObject(gamesaveList)
