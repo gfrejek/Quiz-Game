@@ -1,17 +1,15 @@
 package quiz.generators
 
-import quiz.model.Question
-import quiz.model.QuestionsSource
-import quiz.generators.OpenTDBGenerator._
+import quiz.model.{NumbersAPI, Question, QuestionsSource}
 
 
 object QuestionGenerator {
 
   def generate(source: QuestionsSource, count: Int): Option[List[Question]] = {
     source match {
-      // case NumbersAPI() => {
-
-      // }
+      case NumbersAPI() => {
+        NumbersAPIGenerator.generateBatch(count)
+      }
       case QuestionsSource.openTDB => {
         OpenTDBGenerator.generateBatch(count)
       }
