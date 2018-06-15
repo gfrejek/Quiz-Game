@@ -597,7 +597,7 @@ class View(model: Model, controller: Controller) {
                     }
                   },
                   new Button {
-                    text = "DELETE"
+                    text = "DEL"
                     font = Font(45)
                     alignmentInParent = Pos.CenterRight
                     alignment = Pos.Center
