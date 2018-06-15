@@ -18,10 +18,10 @@ object Application extends JFXApp {
 
   stage = new JFXApp.PrimaryStage {
     title = configuration.getString("title")
-    minHeight = configuration.getInt("height")
-    minWidth = configuration.getInt("width")
-    x = bounds.minX + bounds.width / 2 - configuration.getInt("width") / 2
-    y = bounds.minY + bounds.height / 2 - configuration.getInt("height") / 2
+    minHeight = 1080
+    minWidth = 1920
+    x = bounds.minX + bounds.width / 2 - 1920 / 2
+    y = bounds.minY + bounds.height / 2 - 1080 / 2
     fullScreenExitHint = ""
     fullScreenExitKey = new KeyCodeCombination(KeyCode.X, KeyCombination.ControlDown)
     alwaysOnTop = true

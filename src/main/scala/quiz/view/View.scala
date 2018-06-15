@@ -20,8 +20,8 @@ import scalafx.stage.Screen
 class View(model: Model, controller: Controller) {
 
   val bounds = Screen.primary.bounds
-  val x_mid = bounds.minX + bounds.width / 2 - controller.config.getInt("width") / 2
-  val y_mid = bounds.minY + bounds.height / 2 - controller.config.getInt("height") / 2
+  val x_mid = bounds.minX + bounds.width / 2 - 1920 / 2
+  val y_mid = bounds.minY + bounds.height / 2 - 1080 / 2
 
 
   val smallLogo = new Text {
