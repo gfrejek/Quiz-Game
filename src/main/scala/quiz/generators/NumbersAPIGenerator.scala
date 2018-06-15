@@ -11,7 +11,7 @@ object NumbersAPIGenerator extends Generator {
     try {
       val questions = NumbersAPIFetcher.fetchBatch(count)
       for(line <- questions.split("\n")){
-        val question = "Which " + line.substring(line.indexOf(' ') + 1, line.length - 1) + "?"
+        val question = "What " + line.substring(line.indexOf(' ') + 1, line.length - 1) + "?"
         val correctAnswer = line.substring(0, line.indexOf(' '))
         val otherAnswers = generateIncorrectAnswers(correctAnswer)
         result = Question(question, otherAnswers, correctAnswer) :: result
