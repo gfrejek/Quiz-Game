@@ -1,6 +1,7 @@
 package quiz.controller
 
 import java.time.{Duration, Instant}
+import java.util.{Timer, TimerTask}
 
 import com.typesafe.config.Config
 import quiz.generators.QuestionGenerator
@@ -28,6 +29,10 @@ class Controller(val config: Config) {
   val scoreStr: StringProperty = StringProperty("")
   val progressStr: StringProperty = StringProperty("")
   var startTimestamp: Instant = _
+  var clock: Clock = new Clock()
+  var clockString: StringProperty = StringProperty("")
+  val timer: Timer = new Timer(true)
+  var currentTimerTask: TimerTask = _
 
   var highscoreString = StringProperty(highscoreManager.getHighscoreString())
   var gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
@@ -94,9 +99,14 @@ class Controller(val config: Config) {
     choiceD() = shuffled(3)
     questionContents() = question.question
     startTimestamp = Instant.now()
+    clockString() = "00:00"
+    clock.init()
+    timer.scheduleAtFixedRate(clockTask(), 0, 1000)
   }
 
   def respondToUserChoice(choice: String, elapsedTime: Int): Boolean = {
+    currentTimerTask.cancel()
+    timer.purge()
     if (choice == question.correctAnswer) {
       val endTimestamp: Instant = Instant.now()
       val elapsedTime: Duration = Duration.between(startTimestamp, endTimestamp)
@@ -117,4 +127,33 @@ class Controller(val config: Config) {
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
   }
 
+  def clockTask() = {
+    currentTimerTask = new TimerTask(){
+      def run(){
+        clockString() = clock.toString
+        clock.inc()
+      }
+    }
+    currentTimerTask
+  }
+
+}
+
+class Clock() {
+  var minutes: Long = 0
+  var seconds: Long = 0
+
+  def init(): Unit = {
+    minutes = 0
+    seconds = 0
+  }
+
+  def inc(): Unit = {
+    seconds = (seconds + 1) % 60
+    if(seconds == 0) minutes += 1
+  }
+
+  override def toString: String = {
+    s"%02d:%02d".format(minutes, seconds)
+  }
 }

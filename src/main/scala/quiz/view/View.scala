@@ -61,11 +61,6 @@ class View(model: Model, controller: Controller) {
             font = new Font(40)
             alignment = Pos.Center
           },
-         /* new Text {
-            text <== controller.scoreStr
-            font = new Font(35)
-            alignment = Pos.Center
-          },*/
           new Button {
             text = "Return to main menu"
             prefWidth = 500
@@ -86,6 +81,8 @@ class View(model: Model, controller: Controller) {
       case KeyCode.Escape => {
         controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
         controller.changeScene(refreshMenuScene())
+        controller.currentTimerTask.cancel()
+        controller.timer.purge()
       }
       case _ =>
     }
@@ -100,7 +97,7 @@ class View(model: Model, controller: Controller) {
       children = List (
         new HBox {
           alignment = Pos.Center
-          spacing = 250
+          spacing = 150
           children = List (
             new Text {
               text = "SCORE: "
@@ -121,6 +118,16 @@ class View(model: Model, controller: Controller) {
               text <== controller.progressStr + "/" + controller.currentGame.numberOfQuestions.toString
               font = new Font(50)
               alignment = Pos.Center
+            },
+            new Text {
+              text = "Time: "
+              font = new Font(50)
+              alignment = Pos.BottomCenter
+            },
+            new Text {
+              text <== controller.clockString
+              font = new Font(50)
+              alignment = Pos.BottomCenter
             }
           )
         },
