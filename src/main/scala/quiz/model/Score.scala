@@ -1,8 +1,8 @@
 package quiz.model
 
 import java.io.Serializable
-import java.util.{Calendar, Date}
 import java.text.SimpleDateFormat
+import java.util.Calendar
 
 @SerialVersionUID(11L)
 class Score (val score : Int, val playername: String) extends Serializable {
@@ -19,13 +19,24 @@ class Score (val score : Int, val playername: String) extends Serializable {
 
   def display(): String = {
     var result = StringBuilder.newBuilder
-    result.append(playername)
-    result.append("\t")
-    result.append(score)
-    result.append("\t")
-    val sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val sdfDate = new SimpleDateFormat("yyyy-MM-dd")
     val strDate = sdfDate.format(date)
-    result.append(strDate.toString)
+    val initialLength = score.toString.length + strDate.toString.length + 6
+    val spacesLeft = 32 - (initialLength + playername.length)
+    if(spacesLeft < 0){
+      result.append(playername.substring(0, playername.length + spacesLeft - 1) + "~")
+      result.append("  ")
+    } else if(spacesLeft == 0){
+      result.append(playername)
+      result.append("  ")
+    } else {
+      val spaces = spacesLeft + 2
+      result.append(playername)
+      result.append(" " * spaces)
+    }
+    result.append(score)
+    result.append("  ")
+    result.append("[" + strDate.toString + "]")
     result.toString
   }
 

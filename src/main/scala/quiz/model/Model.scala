@@ -14,7 +14,7 @@ object QuestionsSource {
   val theSportsDB = new TheSportsDB()
 }
 
-case class Question(var question: String, answer: List[String], correctAnswer: String)
+case class Question(var question: String, var answer: List[String], var correctAnswer: String)
 
 class Model(controller: Controller) {
 

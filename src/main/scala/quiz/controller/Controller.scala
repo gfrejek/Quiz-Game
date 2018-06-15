@@ -1,13 +1,14 @@
 package quiz.controller
 
-import java.util.Calendar
+import java.time.{Duration, Instant}
 
 import com.typesafe.config.Config
+import quiz.generators.QuestionGenerator
+import quiz.model._
+import scalafx.beans.property.StringProperty
 import scalafx.scene.Scene
 import scalafx.stage.Stage
-import quiz.model._
-import quiz.generators.QuestionGenerator
-import scalafx.beans.property.StringProperty
+
 import scala.util.Random
 
 class Controller(val config: Config) {
@@ -26,9 +27,9 @@ class Controller(val config: Config) {
   val questionContents: StringProperty = StringProperty("")
   val scoreStr: StringProperty = StringProperty("")
   val progressStr: StringProperty = StringProperty("")
+  var startTimestamp: Instant = _
 
   var highscoreString = StringProperty(highscoreManager.getHighscoreString())
-  //TODO not the right place to put it
   var gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
 
   def passControl(passed: Stage) = {
@@ -92,11 +93,16 @@ class Controller(val config: Config) {
     choiceC() = shuffled(2)
     choiceD() = shuffled(3)
     questionContents() = question.question
+    startTimestamp = Instant.now()
   }
 
   def respondToUserChoice(choice: String, elapsedTime: Int): Boolean = {
     if (choice == question.correctAnswer) {
-      currentGame.score() += (1000 / elapsedTime)
+      val endTimestamp: Instant = Instant.now()
+      val elapsedTime: Duration = Duration.between(startTimestamp, endTimestamp)
+      var elapsedTimeInSec = elapsedTime.getSeconds - 4
+      if(elapsedTimeInSec < 1) elapsedTimeInSec = 1
+      currentGame.score() += (1000 * Math.pow(0.9, elapsedTimeInSec-1)).toInt
     }
     if(gameNotFinished()) {
       askNextQuestion()

@@ -49,7 +49,7 @@ class GamesaveManager {
   }
 
   def deleteGamesave(gamesave : Gamesave) = {
-    gamesaveList = gamesaveList diff Seq(gamesave) // TODO not sure if it will work (define equals/hashcode in Game?)
+    gamesaveList = gamesaveList diff Seq(gamesave)
     updateGamesaveFile()
   }
 
