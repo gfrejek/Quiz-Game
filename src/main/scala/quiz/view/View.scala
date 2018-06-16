@@ -74,15 +74,35 @@ class View(model: Model, controller: Controller) {
       }
     }
   }
+
+  def refreshPauseScene(): Scene = {
+
+    new Scene() {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 50
+        padding = Insets(100)
+        children = List (
+
+        )
+    }
+  }
   
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
       case KeyCode.Escape => {
-        controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
-        controller.changeScene(refreshMenuScene())
-        controller.currentTimerTask.cancel()
-        controller.timer.purge()
+        // controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
+        // controller.changeScene(refreshMenuScene())
+        // controller.currentTimerTask.cancel()
+        // controller.timer.purge()
+        controller.pauseGame()
+        controller.changeScene(refreshPauseScene())
       }
       case _ =>
     }
@@ -147,7 +167,7 @@ class View(model: Model, controller: Controller) {
             prefHeight = 125
             font = new Font(35)
             onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceA(), 1)) {
+              if (controller.respondToUserChoice(controller.choiceA())) {
                 controller.changeScene(refreshConcludeGameScene())
               }
             }
@@ -159,7 +179,7 @@ class View(model: Model, controller: Controller) {
             prefHeight = 125
             font = new Font(35)
             onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceB(), 1)) {
+              if (controller.respondToUserChoice(controller.choiceB())) {
                 controller.changeScene(refreshConcludeGameScene())
               }
             }
@@ -171,7 +191,7 @@ class View(model: Model, controller: Controller) {
             prefHeight = 125
             font = new Font(35)
             onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceC(), 1)) {
+              if (controller.respondToUserChoice(controller.choiceC())) {
                 controller.changeScene(refreshConcludeGameScene())
               }
             }
@@ -183,7 +203,7 @@ class View(model: Model, controller: Controller) {
             prefHeight = 125
             font = new Font(35)
             onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceD(), 1)) {
+              if (controller.respondToUserChoice(controller.choiceD())) {
                 controller.changeScene(refreshConcludeGameScene())
               }
             }

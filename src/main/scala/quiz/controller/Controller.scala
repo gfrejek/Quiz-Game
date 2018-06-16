@@ -29,13 +29,13 @@ class Controller(val config: Config) {
   val scoreStr: StringProperty = StringProperty("")
   val progressStr: StringProperty = StringProperty("")
   var startTimestamp: Instant = _
-  var clock: Clock = new Clock()
-  var clockString: StringProperty = StringProperty("")
+  val clock: Clock = new Clock()
+  val clockString: StringProperty = StringProperty("")
   val timer: Timer = new Timer(true)
   var currentTimerTask: TimerTask = _
 
-  var highscoreString = StringProperty(highscoreManager.getHighscoreString())
-  var gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
+  val highscoreString = StringProperty(highscoreManager.getHighscoreString())
+  val gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
 
   def passControl(passed: Stage) = {
     currentStage = passed
@@ -69,6 +69,7 @@ class Controller(val config: Config) {
 
   def continueGame(game: Game) = {
     currentGame = game
+
     val howManyLeft = game.numberOfQuestions - game.currentQuestion()
     currentQuestionList = QuestionGenerator.generate(game.data, howManyLeft) match {
       case Some(validList) => validList
@@ -98,13 +99,14 @@ class Controller(val config: Config) {
     choiceC() = shuffled(2)
     choiceD() = shuffled(3)
     questionContents() = question.question
+
     startTimestamp = Instant.now()
     clockString() = "00:00"
     clock.init()
     timer.scheduleAtFixedRate(clockTask(), 0, 1000)
   }
 
-  def respondToUserChoice(choice: String, elapsedTime: Int): Boolean = {
+  def respondToUserChoice(choice: String): Boolean = {
     currentTimerTask.cancel()
     timer.purge()
     if (choice == question.correctAnswer) {
@@ -125,6 +127,14 @@ class Controller(val config: Config) {
 
   def concludeGame() = {
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
+  }
+
+  def pauseGame() = {
+
+  }
+
+  def resumeGame() = {
+    
   }
 
   def clockTask() = {
