@@ -23,7 +23,6 @@ class View(model: Model, controller: Controller) {
   val x_mid = bounds.minX + bounds.width / 2 - 1920 / 2
   val y_mid = bounds.minY + bounds.height / 2 - 1080 / 2
 
-
   val smallLogo = new Text {
     text = "-QUIZ-"
     style = "-fx-font: normal bold 110pt sans-serif"
@@ -37,6 +36,7 @@ class View(model: Model, controller: Controller) {
       spread = 0.25
     }
   }
+
 
   def refreshConcludeGameScene(): Scene = {
     new Scene() {
@@ -75,10 +75,17 @@ class View(model: Model, controller: Controller) {
     }
   }
 
-  def refreshPauseScene(): Scene = {
 
+  def refreshPauseScene(): Scene = {
     new Scene() {
       fill = Color.White
+      onKeyPressed = (k: KeyEvent) => k.code match {
+        case KeyCode.Escape => {
+          controller.resumeGame()
+          controller.changeScene(gameScene)
+        }
+        case _ =>
+      }
       root = new VBox {
         maxWidth = 1920
         prefWidth = 1920
@@ -88,19 +95,106 @@ class View(model: Model, controller: Controller) {
         spacing = 50
         padding = Insets(100)
         children = List (
-
+          smallLogo,
+          new Text {
+            text = "GAME PAUSED"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 60pt sans-serif"
+            fill = Color.Black
+          },
+          new Button {
+            text = "Save and return to menu"
+            prefWidth = 350
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
+              controller.changeScene(refreshMenuScene())
+            }
+          },
+          new Button {
+            text = "Save and exit"
+            prefWidth = 350
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
+              controller.closeStage()
+            }
+          },
+          new Button {
+            text = "Return to the game"
+            prefWidth = 350
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.resumeGame()
+              controller.changeScene(gameScene)
+            }
+          },
+          new Text {
+            text = "\n\nLifelines"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 30pt sans-serif"
+            fill = Color.Black
+          },
+          new HBox {
+            alignment = Pos.Center
+            spacing = 50
+            padding = Insets(20)
+            children = List (
+              new Button {
+                text = "50:50"
+                prefWidth = 300
+                font = new Font(20)
+                alignment = Pos.Center
+                disable = controller.currentGame.fiftyFiftyUsed
+                onAction = (e: ActionEvent) => {
+                  // controller.useFiftyFifty()
+                  // controller.changeScene(gameScene)
+                }
+              },
+              new Button {
+                text = "Phone-A-Friend"
+                prefWidth = 300
+                font = new Font(20)
+                alignment = Pos.Center
+                disable = controller.currentGame.phoneAFriendUsed
+                onAction = (e: ActionEvent) => {
+                  // controller.changeScene(refreshPhoneAFriendScene())
+                }
+              },
+              new Button {
+                text = "Ask the Audience"
+                prefWidth = 300
+                font = new Font(20)
+                alignment = Pos.Center
+                disable = controller.currentGame.askTheAudienceUsed
+                onAction = (e: ActionEvent) => {
+                  // controller.changeScene(refreshAskTheAudienceScene())
+                }
+              }
+            )  
+          }
         )
+      }
     }
   }
-  
+
+
+  def refreshPhoneAFriendScene(): Scene = {
+    controller.usePhoneAFriend()
+
+    new Scene {
+
+    }
+  }
+
+
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
       case KeyCode.Escape => {
-        // controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
-        // controller.changeScene(refreshMenuScene())
-        // controller.currentTimerTask.cancel()
-        // controller.timer.purge()
         controller.pauseGame()
         controller.changeScene(refreshPauseScene())
       }
@@ -221,6 +315,7 @@ class View(model: Model, controller: Controller) {
       )
     }
   }
+
 
   def refreshNewGameScene(): Scene = {
     new Scene {
@@ -344,6 +439,7 @@ class View(model: Model, controller: Controller) {
     }
   }
     
+
   def refreshMenuScene(): Scene = {
     new Scene {
       fill = Color.White
@@ -418,6 +514,7 @@ class View(model: Model, controller: Controller) {
     }
   }
     
+
   val openingScene = new Scene {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
@@ -458,6 +555,7 @@ class View(model: Model, controller: Controller) {
       )
     }
   }
+
 
   def refreshHighScoreScene(): Scene = {
     controller.highscoreManager.loadScoreFile()
@@ -523,6 +621,7 @@ class View(model: Model, controller: Controller) {
     }
   }
 
+
   def refreshSettingsScene(): Scene = {
     new Scene {
       fill = Color.White
@@ -573,6 +672,7 @@ class View(model: Model, controller: Controller) {
       }
     }
   }
+
 
   def refreshLoadGameScene(): Scene = {
     controller.gamesaveManager.loadGamesaveFile()

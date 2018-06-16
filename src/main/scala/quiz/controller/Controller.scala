@@ -29,6 +29,8 @@ class Controller(val config: Config) {
   val scoreStr: StringProperty = StringProperty("")
   val progressStr: StringProperty = StringProperty("")
   var startTimestamp: Instant = _
+  var pauseTimestamp: Instant = _
+  var timeSpentInPause: Duration = _
   var clock: Clock = new Clock()
   val clockString: StringProperty = StringProperty("")
   var timer: Timer = _
@@ -37,18 +39,22 @@ class Controller(val config: Config) {
   val highscoreString = StringProperty(highscoreManager.getHighscoreString())
   val gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
 
+
   def passControl(passed: Stage) = {
     currentStage = passed
   }
+
 
   def changeScene(scene: Scene) = {
     currentStage.scene = scene
     currentStage.fullScreen = true
   }
   
+
   def closeStage() = {
     currentStage.close()
   }
+
 
   def startNewGame(player: Player, data: QuestionsSource) = {
     currentGame = Game.newGame(player, data)
@@ -65,8 +71,10 @@ class Controller(val config: Config) {
     progressStr <== currentGame.currentQuestion.asString
 
     timer = new Timer(true)
+
     askNextQuestion()
   }
+
 
   def continueGame(game: Game) = {
     currentGame = game
@@ -82,12 +90,15 @@ class Controller(val config: Config) {
     progressStr <== currentGame.currentQuestion.asString
 
     timer = new Timer(true)
+
     askNextQuestion()
   }
+
 
   def gameNotFinished(): Boolean = {
     currentGame.currentQuestion() < currentGame.numberOfQuestions
   }
+
 
   def askNextQuestion() = {
     question = iterator.next()
@@ -105,16 +116,19 @@ class Controller(val config: Config) {
     startTimestamp = Instant.now()
     clockString() = "00:00"
     clock.init()
+    timeSpentInPause = Duration.ZERO
     timer.scheduleAtFixedRate(clockTask(), 0, 1000)
   }
+
 
   def respondToUserChoice(choice: String): Boolean = {
     currentTimerTask.cancel()
     timer.purge()
     if (choice == question.correctAnswer) {
       val endTimestamp: Instant = Instant.now()
-      val elapsedTime: Duration = Duration.between(startTimestamp, endTimestamp)
-      var elapsedTimeInSec = elapsedTime.getSeconds - 4
+      val overallElapsedTime: Duration = Duration.between(startTimestamp, endTimestamp)
+      val gameElapsedTime: Duration = overallElapsedTime.minus(timeSpentInPause)
+      var elapsedTimeInSec = gameElapsedTime.getSeconds - 4
       if(elapsedTimeInSec < 1) elapsedTimeInSec = 1
       currentGame.score() += (1000 * Math.pow(0.9, elapsedTimeInSec-1)).toInt
     }
@@ -127,17 +141,44 @@ class Controller(val config: Config) {
     }
   }
 
+
   def concludeGame() = {
     timer.cancel()
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
   }
 
+
   def pauseGame() = {
+    currentTimerTask.cancel()
+    timer.purge()
+    pauseTimestamp = Instant.now()
+  }
+
+
+  def resumeGame() = {
+    val pauseStopTimestamp = Instant.now()
+    val thisPauseDuration = Duration.between(pauseTimestamp, pauseStopTimestamp)
+    timeSpentInPause = timeSpentInPause.plus(thisPauseDuration)
+
+    timer.scheduleAtFixedRate(clockTask(), 0, 1000)
+  }
+
+  def useFiftyFifty() = {
+    currentGame.fiftyFiftyUsed = true
+
 
   }
 
-  def resumeGame() = {
+  def usePhoneAFriend() = {
+    currentGame.phoneAFriendUsed = true
 
+
+  }
+
+  def useAskTheAudience() = {
+    currentGame.askTheAudienceUsed = true
+
+    
   }
 
   def clockTask() = {
@@ -151,6 +192,8 @@ class Controller(val config: Config) {
   }
 
 }
+
+
 
 class Clock() {
   var minutes: Long = 0

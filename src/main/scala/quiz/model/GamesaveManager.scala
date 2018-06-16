@@ -76,6 +76,4 @@ class GamesaveManager {
     result.toString()
   }
 
-
-
 }
