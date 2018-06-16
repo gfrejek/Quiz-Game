@@ -83,6 +83,7 @@ class View(model: Model, controller: Controller) {
         controller.changeScene(refreshMenuScene())
         controller.currentTimerTask.cancel()
         controller.timer.purge()
+        controller.timer.cancel()
       }
       case _ =>
     }

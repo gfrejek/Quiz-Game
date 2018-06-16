@@ -31,7 +31,7 @@ class Controller(val config: Config) {
   var startTimestamp: Instant = _
   var clock: Clock = new Clock()
   var clockString: StringProperty = StringProperty("")
-  val timer: Timer = new Timer(true)
+  var timer: Timer = _
   var currentTimerTask: TimerTask = _
 
   var highscoreString = StringProperty(highscoreManager.getHighscoreString())
@@ -64,6 +64,7 @@ class Controller(val config: Config) {
     scoreStr <== currentGame.score.asString
     progressStr <== currentGame.currentQuestion.asString
 
+    timer = new Timer(true)
     askNextQuestion()
   }
 
@@ -79,6 +80,7 @@ class Controller(val config: Config) {
     scoreStr <== currentGame.score.asString
     progressStr <== currentGame.currentQuestion.asString
 
+    timer = new Timer(true)
     askNextQuestion()
   }
 
@@ -124,6 +126,7 @@ class Controller(val config: Config) {
   }
 
   def concludeGame() = {
+    timer.cancel()
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
   }
 
