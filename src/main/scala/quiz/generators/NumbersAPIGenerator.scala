@@ -17,9 +17,8 @@ object NumbersAPIGenerator extends Generator {
         result = Question(question, otherAnswers, correctAnswer) :: result
       }
     } catch {
-      case e: Throwable => {
+      case e: Throwable =>
         println(e.toString + "Error while generating question batch from NumbersAPI")
-      }
     }
     Option(result)
   }

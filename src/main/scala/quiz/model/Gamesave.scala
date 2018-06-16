@@ -14,7 +14,7 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
     this.date.before(other.date)
   }
 
-  def toGame(): Game = {
+  def toGame: Game = {
     var loadedGame = Game(player, questionsSource)
     loadedGame.score() = this.score
     loadedGame.currentQuestion() = this.currentQuestion
@@ -44,12 +44,10 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
     result.append(score)
     result.append("  ")
     result.append(questionNr)
-    //result.append("\n")
-    //result.append("[" + strDate.toString + "]")
     result.toString
   }
 
-  def canEqual(a: Any) = a.isInstanceOf[Gamesave]
+  def canEqual(a: Any): Boolean = a.isInstanceOf[Gamesave]
 
   override def equals(that: Any): Boolean =
     that match {
@@ -65,7 +63,7 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
 @transient
 object Gamesave {
 
-  def apply(game: Game) = {
+  def apply(game: Game): Gamesave = {
     new Gamesave(game.player, game.score(), game.currentQuestion() - 1, game.numberOfQuestions, Calendar.getInstance().getTime, game.data)
   }
 

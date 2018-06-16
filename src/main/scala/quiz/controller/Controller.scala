@@ -34,23 +34,23 @@ class Controller(val config: Config) {
   var timer: Timer = _
   var currentTimerTask: TimerTask = _
 
-  var highscoreString = StringProperty(highscoreManager.getHighscoreString())
-  var gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
+  var highscoreString = StringProperty(highscoreManager.getHighscoreString)
+  var gamesaveList = StringProperty(gamesaveManager.getGamesaveString)
 
-  def passControl(passed: Stage) = {
+  def passControl(passed: Stage): Unit = {
     currentStage = passed
   }
 
-  def changeScene(scene: Scene) = {
+  def changeScene(scene: Scene): Unit = {
     currentStage.scene = scene
     currentStage.fullScreen = true
   }
   
-  def closeStage() = {
+  def closeStage(): Unit = {
     currentStage.close()
   }
 
-  def startNewGame(player: Player, data: QuestionsSource) = {
+  def startNewGame(player: Player, data: QuestionsSource): Unit = {
     currentGame = Game.newGame(player, data)
     currentGame.currentQuestion() = 0
 
@@ -58,7 +58,7 @@ class Controller(val config: Config) {
       case Some(validList) => validList
       case None => null   // TODO Exception handling
     }
-    
+
     iterator = currentQuestionList.iterator
 
     scoreStr <== currentGame.score.asString
@@ -68,7 +68,7 @@ class Controller(val config: Config) {
     askNextQuestion()
   }
 
-  def continueGame(game: Game) = {
+  def continueGame(game: Game): Unit = {
     currentGame = game
     val howManyLeft = game.numberOfQuestions - game.currentQuestion()
     currentQuestionList = QuestionGenerator.generate(game.data, howManyLeft) match {
@@ -88,14 +88,14 @@ class Controller(val config: Config) {
     currentGame.currentQuestion() < currentGame.numberOfQuestions
   }
 
-  def askNextQuestion() = {
+  def askNextQuestion(): Unit = {
     question = iterator.next()
     currentGame.currentQuestion() += 1
 
     val choiceList = question.correctAnswer :: question.answer
     val shuffled = Random.shuffle(choiceList)
 
-    choiceA() = shuffled(0)
+    choiceA() = shuffled.head
     choiceB() = shuffled(1)
     choiceC() = shuffled(2)
     choiceD() = shuffled(3)
@@ -125,12 +125,12 @@ class Controller(val config: Config) {
     }
   }
 
-  def concludeGame() = {
+  def concludeGame(): Unit = {
     timer.cancel()
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
   }
 
-  def clockTask() = {
+  def clockTask(): TimerTask = {
     currentTimerTask = new TimerTask(){
       def run(){
         clockString() = clock.toString

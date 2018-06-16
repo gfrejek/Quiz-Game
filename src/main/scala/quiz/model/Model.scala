@@ -6,12 +6,12 @@ import quiz.controller.Controller
 sealed abstract class QuestionsSource extends Serializable
 case class NumbersAPI() extends QuestionsSource
 case class OpenTDB() extends QuestionsSource
-case class TheSportsDB() extends QuestionsSource
+case class JService() extends QuestionsSource
 
 object QuestionsSource {
-  val numbersAPI = new NumbersAPI()
-  val openTDB = new OpenTDB()
-  val theSportsDB = new TheSportsDB()
+  val numbersAPI = NumbersAPI()
+  val jService = JService()
+  val openTDB = OpenTDB()
 }
 
 case class Question(var question: String, var answer: List[String], var correctAnswer: String)

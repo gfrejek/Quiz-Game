@@ -1,6 +1,6 @@
 package quiz.fetchers
 
-import scalaj.http.{Http, HttpRequest}
+import scalaj.http.Http
 
 
 object OpenTDBFetcher extends Fetcher {
@@ -13,5 +13,4 @@ object OpenTDBFetcher extends Fetcher {
 
     jsonQuestionStr
   }
-
 }

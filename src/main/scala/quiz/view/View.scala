@@ -5,7 +5,7 @@ import quiz.model._
 import scalafx.Includes._
 import scalafx.beans.property.StringProperty
 import scalafx.event.ActionEvent
-import scalafx.geometry.{Insets, Pos}
+import scalafx.geometry.{Insets, Pos, Rectangle2D}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, ScrollPane, TextField}
 import scalafx.scene.effect.DropShadow
@@ -19,12 +19,12 @@ import scalafx.stage.Screen
 
 class View(model: Model, controller: Controller) {
 
-  val bounds = Screen.primary.bounds
-  val x_mid = bounds.minX + bounds.width / 2 - 1920 / 2
-  val y_mid = bounds.minY + bounds.height / 2 - 1080 / 2
+  val bounds: Rectangle2D = Screen.primary.bounds
+  val x_mid: Double = bounds.minX + bounds.width / 2 - 1920 / 2
+  val y_mid: Double = bounds.minY + bounds.height / 2 - 1080 / 2
 
 
-  val smallLogo = new Text {
+  val smallLogo: Text = new Text {
     text = "-QUIZ-"
     style = "-fx-font: normal bold 110pt sans-serif"
     fill = new LinearGradient (
@@ -78,13 +78,12 @@ class View(model: Model, controller: Controller) {
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
-      case KeyCode.Escape => {
+      case KeyCode.Escape =>
         controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
         controller.changeScene(refreshMenuScene())
         controller.currentTimerTask.cancel()
         controller.timer.purge()
         controller.timer.cancel()
-      }
       case _ =>
     }
     root = new VBox {
@@ -141,7 +140,7 @@ class View(model: Model, controller: Controller) {
         new GridPane {
           alignment = Pos.Center
           padding = Insets(50)
-          val button1 = new Button {
+          val button1: Button = new Button {
             text <== controller.choiceA
             alignmentInParent = Pos.BaselineRight
             prefWidth = 500
@@ -153,7 +152,7 @@ class View(model: Model, controller: Controller) {
               }
             }
           }
-          val button2 = new Button {
+          val button2: Button = new Button {
             text <== controller.choiceB
             alignmentInParent = Pos.BaselineLeft
             prefWidth = 500
@@ -165,7 +164,7 @@ class View(model: Model, controller: Controller) {
               }
             }
           }
-          val button3 = new Button {
+          val button3: Button = new Button {
             text <== controller.choiceC
             alignmentInParent = Pos.BaselineRight
             prefWidth = 500
@@ -177,7 +176,7 @@ class View(model: Model, controller: Controller) {
               }
             }
           }
-          val button4 = new Button {
+          val button4: Button = new Button {
             text <== controller.choiceD
             alignmentInParent = Pos.BaselineLeft
             prefWidth = 500
@@ -218,26 +217,26 @@ class View(model: Model, controller: Controller) {
         var choosenSource: QuestionsSource = _
         var choosenSourcePropertyStr = StringProperty("")
         
-        lazy val userNameInput = new TextField() {
+        lazy val userNameInput: TextField = new TextField() {
           maxWidth = 500
           font = Font(40)
           promptText = "Your Name"
           alignment = Pos.Center
         }
         
-        val openTDBButton = new Button {
+        val openTDBButton: Button = new Button {
           text = "General"
           prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
         }
-        val theSportsDBButton = new Button {
-          text = "Sports"
+        val JServiceButton: Button = new Button {
+          text = "JService"
           prefWidth = 300
           font = new Font(20)
           alignment = Pos.Center
         }
-        val numbersAPIButton = new Button {
+        val numbersAPIButton: Button = new Button {
           text = "Numbers"
           prefWidth = 300
           font = new Font(20)
@@ -247,21 +246,21 @@ class View(model: Model, controller: Controller) {
         openTDBButton.onAction = (e: ActionEvent) => {
           choosenSource = QuestionsSource.openTDB
           openTDBButton.disable = true
-          theSportsDBButton.disable = false
+          JServiceButton.disable = false
           numbersAPIButton.disable = false
           choosenSourcePropertyStr() = "General"
         }
-        theSportsDBButton.onAction = (e: ActionEvent) => {
-          choosenSource = QuestionsSource.theSportsDB
+        JServiceButton.onAction = (e: ActionEvent) => {
+          choosenSource = QuestionsSource.jService
           openTDBButton.disable = false
-          theSportsDBButton.disable = true
+          JServiceButton.disable = true
           numbersAPIButton.disable = false
-          choosenSourcePropertyStr() = "Sports"
+          choosenSourcePropertyStr() = "JService"
         }
         numbersAPIButton.onAction = (e: ActionEvent) => {
           choosenSource = QuestionsSource.numbersAPI
           openTDBButton.disable = false
-          theSportsDBButton.disable = false
+          JServiceButton.disable = false
           numbersAPIButton.disable = true
           choosenSourcePropertyStr() = "Numbers"
         }
@@ -285,7 +284,7 @@ class View(model: Model, controller: Controller) {
             padding = Insets(20)
             children = List (
               openTDBButton,
-              theSportsDBButton,
+              JServiceButton,
               numbersAPIButton
             )
           },
@@ -399,12 +398,11 @@ class View(model: Model, controller: Controller) {
     }
   }
     
-  val openingScene = new Scene {
+  val openingScene: Scene = new Scene {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
-      case KeyCode.Enter => {
+      case KeyCode.Enter =>
         controller.changeScene(refreshMenuScene())
-      }
       case _ =>
     }
     root = new VBox {
@@ -446,7 +444,7 @@ class View(model: Model, controller: Controller) {
     new Scene {
       fill = Color.White
       var iteration: Int = 0
-      val scrollPane = new ScrollPane() {
+      val scrollPane: ScrollPane = new ScrollPane() {
         maxWidth = 1000
         prefWidth = 1000
         maxHeight = 1100
@@ -458,7 +456,7 @@ class View(model: Model, controller: Controller) {
           children = {
             for (hs <- controller.highscoreManager.scoreList) yield
               new Text {
-                text = hs.display
+                text = hs.display()
                 font = Font.font("Courier New", 49)
                 wrappingWidth = 950
                 alignment = Pos.Center
@@ -560,7 +558,7 @@ class View(model: Model, controller: Controller) {
 
     new Scene {
       fill = Color.White
-      val saveList = new ScrollPane {
+      val saveList: ScrollPane = new ScrollPane {
         maxWidth = 1200
         prefWidth = 1200
         maxHeight = 800
@@ -575,7 +573,7 @@ class View(model: Model, controller: Controller) {
             maxHeight = 70
             children = List (
               new Text {
-                text = save.display
+                text = save.display()
                 font = Font.font("Courier New", 46)
                 prefHeight = 70
                 prefWidth = 1200 - 450 - 50 - 30
@@ -653,5 +651,4 @@ class View(model: Model, controller: Controller) {
       }
     }
   }
-
 }

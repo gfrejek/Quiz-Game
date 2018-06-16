@@ -11,7 +11,7 @@ object NumbersAPIFetcher extends Fetcher {
     for(i <- 1 to count){
       var question = newQuestion()
       for{
-        triesNumber <- 1 to 5
+        triesNumber <- 1 to 10
         if !correctQuestion(question)
       } question = newQuestion()
 

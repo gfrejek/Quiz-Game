@@ -5,8 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f7779bd-76a0-4356-a05c-fcf4119c5c31" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/quiz/fetchers/JServiceFetcher.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/quiz/generators/JServiceGenerator.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/controller/Controller.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/controller/Controller.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/fetchers/OpenTDBFetcher.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/fetchers/OpenTDBFetcher.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/fetchers/TheSportsTDBFetcher.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/generators/Generator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/generators/Generator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/generators/NumbersAPIGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/generators/NumbersAPIGenerator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/generators/OpenTDBGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/generators/OpenTDBGenerator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/generators/TheSportsTDBGenerator.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/model/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/model/Game.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/model/Gamesave.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/model/Gamesave.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/model/Score.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/model/Score.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/quiz/view/View.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/quiz/view/View.scala" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -29,41 +45,17 @@
       <file leaf-file-name="View.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/view/View.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1275">
-              <caret line="89" column="21" selection-start-line="89" selection-start-column="21" selection-end-line="89" selection-end-column="21" />
-              <folding>
-                <element signature="e#19#52#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="10710">
+              <caret line="644" column="40" selection-start-line="644" selection-start-column="40" selection-end-line="644" selection-end-column="40" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NumbersAPIGenerator.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/NumbersAPIGenerator.scala">
+      <file leaf-file-name="JServiceGenerator.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/JServiceGenerator.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
-              <folding>
-                <element signature="e#25#63#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.sbt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.sbt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Controller.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/controller/Controller.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="108" column="72" lean-forward="true" selection-start-line="108" selection-start-column="72" selection-end-line="108" selection-end-column="72" />
+            <state relative-caret-position="255">
+              <caret line="19" selection-start-line="19" selection-end-line="19" />
               <folding>
                 <element signature="e#25#61#0" expanded="true" />
               </folding>
@@ -71,29 +63,98 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NumbersAPIFetcher.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala">
+      <file leaf-file-name="QuestionGenerator.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" column="116" selection-start-line="39" selection-start-column="116" selection-end-line="39" selection-end-column="116" />
+            <state relative-caret-position="289">
+              <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Controller.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/controller/Controller.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="32" column="47" selection-start-line="32" selection-start-column="47" selection-end-line="32" selection-end-column="47" />
+              <folding>
+                <element signature="e#25#61#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GamesaveManager.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1156">
+              <caret line="71" column="1" selection-start-line="71" selection-start-column="1" selection-end-line="71" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HighscoreManager.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="782">
+              <caret line="49" column="15" selection-start-line="49" selection-start-column="15" selection-end-line="49" selection-end-column="15" />
+              <folding>
+                <element signature="e#20#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Model.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Player.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Player.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="39" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Score.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Score.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+              <folding>
+                <element signature="e#20#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Utilities.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/utils/Utilities.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Package Object" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Game</find>
-      <find>smallLogo</find>
-      <find>Return to main menu</find>
-      <find>Highscores</find>
-      <find>mock</find>
-      <find>SCORE</find>
-      <find>Saved games</find>
-      <find>Insets(50,</find>
-      <find>unescape</find>
-      <find>changeScene</find>
       <find>choiceA</find>
       <find>startTimestamp</find>
       <find>currentGame</find>
@@ -106,7 +167,6 @@
       <find>display</find>
       <find>conclude</find>
       <find>Rand</find>
-      <find>generateBatch</find>
       <find>OpenTDBGenerator</find>
       <find>Numbers</find>
       <find>s&quot;</find>
@@ -114,6 +174,17 @@
       <find>askNextQuestion</find>
       <find>timer</find>
       <find>cancel</find>
+      <find>convertTO</find>
+      <find>shuffle</find>
+      <find>generateBatch</find>
+      <find>Spor</find>
+      <find>QuestionsSource</find>
+      <find>OpenTDB</find>
+      <find>JService</find>
+      <find>Sport</find>
+      <find>Button</find>
+      <find>shuf</find>
+      <find>parseJson</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -125,19 +196,22 @@
         <option value="$PROJECT_DIR$/src/main/scala/quiz/utils/Utilities.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/app.conf" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/model/Player.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala" />
+        <option value="$PROJECT_DIR$/build.sbt" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/fetchers/JServiceFetcher.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/fetchers/OpenTDBFetcher.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/Generator.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/NumbersAPIGenerator.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/OpenTDBGenerator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/model/Game.scala" />
-        <option value="$PROJECT_DIR$/build.sbt" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/OpenTDBGenerator.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/model/Gamesave.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/model/Score.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/fetchers/OpenTDBFetcher.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/NumbersAPIGenerator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/view/View.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/quiz/generators/JServiceGenerator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/quiz/controller/Controller.scala" />
       </list>
     </option>
@@ -191,8 +265,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -200,11 +272,93 @@
               <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
               <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+              <item name="fetchers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="quiz-game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Quiz-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="quiz" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -212,7 +366,7 @@
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.3505747" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.statistic.project.settings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -332,28 +486,29 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32900432" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.3300866" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32900432" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.20779221" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26865673" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27132195" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="7" weight="0.25324675" />
+      <window_info anchor="bottom" id="Statistic" weight="0.32900432" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="7" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.32900432" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
     </layout>
     <layout-to-restore>
       <window_info anchor="bottom" id="Build" order="7" weight="0.32900432" />
@@ -373,7 +528,6 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.32900432" />
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="right" id="Gradle" order="7" />
@@ -385,6 +539,7 @@
       <window_info anchor="right" id="Theme Preview" order="9" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
     </layout-to-restore>
   </component>
@@ -393,38 +548,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="42" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Player.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Gamesave.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/view/View.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4403">
           <caret line="259" column="26" selection-start-line="259" selection-start-column="26" selection-end-line="259" selection-end-column="26" />
-          <folding>
-            <element signature="e#19#52#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -598,16 +729,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/TheSportsTDBGenerator.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/utils/Utilities.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/TheSportsTDBGenerator.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/resources/app.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -629,100 +751,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="22" column="43" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/Generator.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Player.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="55" column="17" lean-forward="true" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Score.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Gamesave.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Game.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/OpenTDBFetcher.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="25" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/TheSportsTDBFetcher.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/Fetcher.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="58" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/OpenTDBGenerator.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="116" selection-start-line="39" selection-start-column="116" selection-end-line="39" selection-end-column="116" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.sbt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -730,30 +758,147 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/view/View.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/package.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/Fetcher.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="89" column="21" selection-start-line="89" selection-start-column="21" selection-end-line="89" selection-end-column="21" />
-          <folding>
-            <element signature="e#19#52#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="51">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/JServiceFetcher.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/NumbersAPIFetcher.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/TheSportsTDBFetcher.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/fetchers/OpenTDBFetcher.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/Generator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/NumbersAPIGenerator.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="29" column="23" selection-start-line="29" selection-start-column="23" selection-end-line="29" selection-end-column="23" />
+        <state relative-caret-position="24">
+          <caret line="20" column="85" selection-start-line="20" selection-start-column="85" selection-end-line="20" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/OpenTDBGenerator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="43" column="21" lean-forward="true" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Game.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Gamesave.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/GamesaveManager.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1156">
+          <caret line="71" column="1" selection-start-line="71" selection-start-column="1" selection-end-line="71" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/HighscoreManager.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="49" column="15" selection-start-line="49" selection-start-column="15" selection-end-line="49" selection-end-column="15" />
           <folding>
-            <element signature="e#25#63#0" expanded="true" />
+            <element signature="e#20#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Model.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Player.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="39" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/model/Score.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+          <folding>
+            <element signature="e#20#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/utils/Utilities.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/QuestionGenerator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/view/View.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10710">
+          <caret line="644" column="40" selection-start-line="644" selection-start-column="40" selection-end-line="644" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/generators/JServiceGenerator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="e#25#61#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/quiz/controller/Controller.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="108" column="72" lean-forward="true" selection-start-line="108" selection-start-column="72" selection-end-line="108" selection-end-column="72" />
+        <state relative-caret-position="323">
+          <caret line="32" column="47" selection-start-line="32" selection-start-column="47" selection-end-line="32" selection-end-column="47" />
           <folding>
             <element signature="e#25#61#0" expanded="true" />
           </folding>

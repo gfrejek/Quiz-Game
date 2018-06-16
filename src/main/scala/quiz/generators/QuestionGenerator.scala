@@ -1,25 +1,18 @@
 package quiz.generators
 
-import quiz.model.{NumbersAPI, Question, QuestionsSource}
+import quiz.model._
 
 
 object QuestionGenerator {
 
   def generate(source: QuestionsSource, count: Int): Option[List[Question]] = {
     source match {
-      case NumbersAPI() => {
+      case NumbersAPI() =>
         NumbersAPIGenerator.generateBatch(count)
-      }
-      case QuestionsSource.openTDB => {
+      case OpenTDB() =>
         OpenTDBGenerator.generateBatch(count)
-      }
-      case _ => {
-        null
-      }
-      // case TheSportsDB() => {
-
-      // }
+      case JService() =>
+        JServiceGenerator.generateBatch(count)
     }
   }
-
 }

@@ -2,7 +2,6 @@ package quiz.model
 
 import java.io._
 import java.text.SimpleDateFormat
-import java.util.{Calendar, Date}
 
 import scala.collection.mutable
 
@@ -12,49 +11,43 @@ class HighscoreManager() {
   val highScoreFile = "scores.dat"
   val highscorefilePath = s"$highScoreFile"
 
-  def loadScoreFile() = {
+  def loadScoreFile(): Unit = {
     try{
       val inputStream = new ObjectInputStream(new FileInputStream(highscorefilePath))
       scoreList = inputStream.readObject().asInstanceOf[mutable.MutableList[Score]]
       inputStream.close()
 
     } catch {
-        case ex1: FileNotFoundException => {
-          // val outputStream = new ObjectOutputStream(new FileOutputStream(highscorefilePath))
-          // outputStream.writeObject(scoreList)
-          // outputStream.close()    // TODO try catch exception
+        case ex1: FileNotFoundException =>
           scoreList = mutable.MutableList[Score]()
-        }
-        case ex: Throwable => {
+        case ex: Throwable =>
           println(ex.toString)
-        }
-      }
+    }
   }
 
-  private def updateScoreFile() = {
+  private def updateScoreFile(): Unit = {
     try{
       val outputStream = new ObjectOutputStream(new FileOutputStream(highscorefilePath))
       outputStream.writeObject(scoreList)
       outputStream.close()
     } catch {
-      case ex: Throwable => {
+      case ex: Throwable =>
         println(ex.toString)
-      }
     }
   }
 
-  def addScore(score: Score) = {
+  def addScore(score: Score): Unit = {
     loadScoreFile()
     scoreList += score
     scoreList = scoreList.sortWith(_.score > _.score)
     updateScoreFile()
   }
 
-  def reset() = {
+  def reset(): Boolean = {
     new File(highscorefilePath).delete()
   }
 
-  def getHighscoreString() = {
+  def getHighscoreString: String = {
     var result = StringBuilder.newBuilder
     loadScoreFile()
     for(score <- scoreList){

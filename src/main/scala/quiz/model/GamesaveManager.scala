@@ -11,53 +11,47 @@ class GamesaveManager {
   val gamesaveFile = "gamesaves.sav"
   val gamesaveFilePath = s"$gamesaveFile"
 
-  def loadGamesaveFile() = {
+  def loadGamesaveFile(): Unit = {
     try{
       val inputStream = new ObjectInputStream(new FileInputStream(gamesaveFilePath))
       gamesaveList = inputStream.readObject().asInstanceOf[mutable.MutableList[Gamesave]]
       inputStream.close()
 
     } catch {
-      case ex1: FileNotFoundException => {
-        // val outputStream = new ObjectOutputStream(new FileOutputStream(gamesaveFilePath))
-        // outputStream.writeObject(gamesaveList)
-        // outputStream.close()    // TODO try catch exception
+      case ex1: FileNotFoundException =>
         gamesaveList = new mutable.MutableList[Gamesave]()
-      }
-      case ex: Throwable => {
+      case ex: Throwable =>
         println(ex.toString)
-      }
     }
   }
 
-  def updateGamesaveFile() = {
+  def updateGamesaveFile(): Unit = {
     try{
       val outputStream = new ObjectOutputStream(new FileOutputStream(gamesaveFilePath))
       outputStream.writeObject(gamesaveList)
       outputStream.close()
     } catch {
-      case ex: Throwable => {
+      case ex: Throwable =>
         println(ex.toString)
-      }
     }
   }
 
-  def addGamesave(newGameSave: Gamesave) = {
+  def addGamesave(newGameSave: Gamesave): Unit = {
     loadGamesaveFile()
     gamesaveList += newGameSave
     updateGamesaveFile()
   }
 
-  def deleteGamesave(gamesave : Gamesave) = {
+  def deleteGamesave(gamesave : Gamesave): Unit = {
     gamesaveList = gamesaveList diff Seq(gamesave)
     updateGamesaveFile()
   }
 
-  def reset() = {
+  def reset(): Boolean = {
     new File(gamesaveFilePath).delete()
   }
 
-  def getGamesaveString() = {
+  def getGamesaveString: String = {
     loadGamesaveFile()
     var result = StringBuilder.newBuilder
     for(gamesave <- gamesaveList){
@@ -75,7 +69,4 @@ class GamesaveManager {
 
     result.toString()
   }
-
-
-
 }
