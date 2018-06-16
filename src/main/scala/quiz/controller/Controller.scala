@@ -29,10 +29,13 @@ class Controller(val config: Config) {
   val scoreStr: StringProperty = StringProperty("")
   val progressStr: StringProperty = StringProperty("")
   var startTimestamp: Instant = _
+  var pauseTimestamp: Instant = _
+  var timeSpentInPause: Duration = _
   var clock: Clock = new Clock()
-  var clockString: StringProperty = StringProperty("")
+  val clockString: StringProperty = StringProperty("")
   var timer: Timer = _
   var currentTimerTask: TimerTask = _
+  val random: Random = new Random()
 
   var highscoreString = StringProperty(highscoreManager.getHighscoreString)
   var gamesaveList = StringProperty(gamesaveManager.getGamesaveString)
@@ -65,11 +68,13 @@ class Controller(val config: Config) {
     progressStr <== currentGame.currentQuestion.asString
 
     timer = new Timer(true)
+
     askNextQuestion()
   }
 
   def continueGame(game: Game): Unit = {
     currentGame = game
+
     val howManyLeft = game.numberOfQuestions - game.currentQuestion()
     currentQuestionList = QuestionGenerator.generate(game.data, howManyLeft) match {
       case Some(validList) => validList
@@ -81,38 +86,45 @@ class Controller(val config: Config) {
     progressStr <== currentGame.currentQuestion.asString
 
     timer = new Timer(true)
+
     askNextQuestion()
   }
+
 
   def gameNotFinished(): Boolean = {
     currentGame.currentQuestion() < currentGame.numberOfQuestions
   }
+
 
   def askNextQuestion(): Unit = {
     question = iterator.next()
     currentGame.currentQuestion() += 1
 
     val choiceList = question.correctAnswer :: question.answer
-    val shuffled = Random.shuffle(choiceList)
+    val shuffled = random.shuffle(choiceList)
 
     choiceA() = shuffled.head
     choiceB() = shuffled(1)
     choiceC() = shuffled(2)
     choiceD() = shuffled(3)
     questionContents() = question.question
+
     startTimestamp = Instant.now()
     clockString() = "00:00"
     clock.init()
+    timeSpentInPause = Duration.ZERO
     timer.scheduleAtFixedRate(clockTask(), 0, 1000)
   }
 
-  def respondToUserChoice(choice: String, elapsedTime: Int): Boolean = {
+
+  def respondToUserChoice(choice: String): Boolean = {
     currentTimerTask.cancel()
     timer.purge()
     if (choice == question.correctAnswer) {
       val endTimestamp: Instant = Instant.now()
-      val elapsedTime: Duration = Duration.between(startTimestamp, endTimestamp)
-      var elapsedTimeInSec = elapsedTime.getSeconds - 4
+      val overallElapsedTime: Duration = Duration.between(startTimestamp, endTimestamp)
+      val gameElapsedTime: Duration = overallElapsedTime.minus(timeSpentInPause)
+      var elapsedTimeInSec = gameElapsedTime.getSeconds - 4
       if(elapsedTimeInSec < 1) elapsedTimeInSec = 1
       currentGame.score() += (1000 * Math.pow(0.9, elapsedTimeInSec-1)).toInt
     }
@@ -129,6 +141,67 @@ class Controller(val config: Config) {
     timer.cancel()
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
   }
+
+  def pauseGame(): Unit = {
+    currentTimerTask.cancel()
+    timer.purge()
+    pauseTimestamp = Instant.now()
+  }
+
+
+  def resumeGame(): Unit = {
+    val pauseStopTimestamp = Instant.now()
+    val thisPauseDuration = Duration.between(pauseTimestamp, pauseStopTimestamp)
+    timeSpentInPause = timeSpentInPause.plus(thisPauseDuration)
+
+    timer.scheduleAtFixedRate(clockTask(), 0, 1000)
+  }
+
+
+  def useFiftyFifty(): List[String] = {
+    currentGame.fiftyFiftyUsed = true
+
+    List(question.answer.head, question.answer(1))
+  }
+
+
+  def usePhoneAFriend(): String = {
+    currentGame.phoneAFriendUsed = true
+    val choice = if (random.nextInt(100) < 75) question.correctAnswer else {
+      val randomElse = random.nextInt(3)
+      question.answer(randomElse)
+    }
+    
+    { "Oh, hi " + currentGame.player.name + ", it's really nice to hear from you. " +
+    "What?! You are playing the Quiz right now on the TV?! That's amazing news! " +
+    "And you need my help? Well, I'll try my best but I can't make any promises, " +
+    "that's for sure. Okay, go ahead, read me the question. Okay... Right... " +
+    "Hmm... I think the correct answer is " + choice + ", however I'm not entirely " +
+    "sure." }
+  }
+
+
+  def useAskTheAudience(): List[(String, Int)] = {
+    currentGame.askTheAudienceUsed = true
+    var pollRes = List[(String, Int)]()
+    val choiceList = question.correctAnswer :: question.answer
+    val shuffled = random.shuffle(choiceList)
+
+    def assignVotes(choice: String) = {
+      if (choice == question.correctAnswer) {
+        random.nextInt(50) + 150
+      } else {
+        random.nextInt(100)
+      }
+    }
+
+    for (choice <- shuffled) {
+      pollRes = (choice, assignVotes(choice)) :: pollRes
+    }
+
+    pollRes
+  }
+
 
   def clockTask(): TimerTask = {
     currentTimerTask = new TimerTask(){

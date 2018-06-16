@@ -4,8 +4,10 @@ import java.util.{Calendar, Date}
 import java.text.SimpleDateFormat
 
 @SerialVersionUID(158L)
-class Gamesave private (var player: Player, var score: Int, var currentQuestion: Int, var numberOfQuestions: Int, var date : Date, var questionsSource: QuestionsSource) extends Serializable {
-
+class Gamesave private (var player: Player, var score: Int, var currentQuestion: Int, 
+  var numberOfQuestions: Int, var date : Date, var questionsSource: QuestionsSource,
+  var fiftyFiftyUsed: Boolean, var phoneAFriendUsed: Boolean, var askTheAudienceUsed: Boolean) extends Serializable {
+  
   def >(other: Gamesave): Boolean = {
     this.date.after(other.date)
   }
@@ -18,6 +20,9 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
     var loadedGame = Game(player, questionsSource)
     loadedGame.score() = this.score
     loadedGame.currentQuestion() = this.currentQuestion
+    loadedGame.fiftyFiftyUsed = this.fiftyFiftyUsed
+    loadedGame.phoneAFriendUsed = this.phoneAFriendUsed
+    loadedGame.askTheAudienceUsed = this.askTheAudienceUsed
     loadedGame
   }
 
@@ -62,9 +67,9 @@ class Gamesave private (var player: Player, var score: Int, var currentQuestion:
 
 @transient
 object Gamesave {
-
   def apply(game: Game): Gamesave = {
-    new Gamesave(game.player, game.score(), game.currentQuestion() - 1, game.numberOfQuestions, Calendar.getInstance().getTime, game.data)
+    new Gamesave(game.player, game.score(), game.currentQuestion() - 1, game.numberOfQuestions, 
+      Calendar.getInstance().getTime, game.data, game.fiftyFiftyUsed, game.phoneAFriendUsed, game.askTheAudienceUsed)
   }
 
 }

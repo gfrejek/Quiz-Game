@@ -12,6 +12,7 @@ libraryDependencies += "io.spray" %%  "spray-json" % "1.3.3"
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.4"
 
 scalacOptions ++= Seq(
-  "-deprecation"
+  "-deprecation",
+  "-feature"
 )
 

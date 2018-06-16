@@ -3,7 +3,7 @@ package quiz.view
 import quiz.controller.Controller
 import quiz.model._
 import scalafx.Includes._
-import scalafx.beans.property.StringProperty
+import scalafx.beans.property.{StringProperty, IntegerProperty}
 import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos, Rectangle2D}
 import scalafx.scene.Scene
@@ -15,6 +15,11 @@ import scalafx.scene.paint.Color._
 import scalafx.scene.paint._
 import scalafx.scene.text.{Font, Text}
 import scalafx.stage.Screen
+import scalafx.animation.{Timeline, KeyFrame}
+import scalafx.scene.chart._
+import scalafx.collections.ObservableBuffer
+import javafx.scene.{chart => jfxsc}
+import scala.language.postfixOps
 
 
 class View(model: Model, controller: Controller) {
@@ -37,6 +42,7 @@ class View(model: Model, controller: Controller) {
       spread = 0.25
     }
   }
+
 
   def refreshConcludeGameScene(): Scene = {
     new Scene() {
@@ -74,17 +80,278 @@ class View(model: Model, controller: Controller) {
       }
     }
   }
-  
+
+
+  def refreshPauseScene(): Scene = {
+    new Scene() {
+      fill = Color.White
+      onKeyPressed = (k: KeyEvent) => k.code match {
+        case KeyCode.Escape => {
+          controller.resumeGame()
+          controller.changeScene(gameScene)
+        }
+        case _ =>
+      }
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 50
+        padding = Insets(100)
+        children = List (
+          smallLogo,
+          new Text {
+            text = "GAME PAUSED"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 60pt sans-serif"
+            fill = Color.Black
+          },
+          new Button {
+            text = "Save and return to menu"
+            prefWidth = 350
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
+              controller.changeScene(refreshMenuScene())
+            }
+          },
+          new Button {
+            text = "Save and exit"
+            prefWidth = 350
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
+              controller.closeStage()
+            }
+          },
+          new Button {
+            text = "Return to the game"
+            prefWidth = 350
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.resumeGame()
+              controller.changeScene(gameScene)
+            }
+          },
+          new Text {
+            text = "\n\nLifelines"
+            alignment = Pos.Center
+            style = "-fx-font: normal bold 30pt sans-serif"
+            fill = Color.Black
+          },
+          new HBox {
+            alignment = Pos.Center
+            spacing = 50
+            padding = Insets(20)
+            children = List (
+              new Button {
+                text = "50:50"
+                prefWidth = 300
+                font = new Font(20)
+                alignment = Pos.Center
+                disable = controller.currentGame.fiftyFiftyUsed
+                onAction = (e: ActionEvent) => {
+                  refreshFiftyFiftyScene()
+                }
+              },
+              new Button {
+                text = "Phone-A-Friend"
+                prefWidth = 300
+                font = new Font(20)
+                alignment = Pos.Center
+                disable = controller.currentGame.phoneAFriendUsed
+                onAction = (e: ActionEvent) => {
+                  refreshPhoneAFriendScene()
+                }
+              },
+              new Button {
+                text = "Ask the Audience"
+                prefWidth = 300
+                font = new Font(20)
+                alignment = Pos.Center
+                disable = controller.currentGame.askTheAudienceUsed
+                onAction = (e: ActionEvent) => {
+                  refreshAskTheAudienceScene()
+                }
+              }
+            )  
+          }
+        )
+      }
+    }
+  }
+
+
+  def refreshPhoneAFriendScene(): Unit = {
+    val advice = controller.usePhoneAFriend()
+
+    val text = new Text {
+      font = new Font(45)
+      fill = Color.Black
+      wrappingWidth = 1500
+    }
+    
+    val scene = new Scene {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          new Text {
+            text = "Contacting a friend..."
+            font = new Font(40)
+            fill = Color.Black
+            alignment = Pos.Center
+          },
+          text,
+          new Button {
+            text = "Go back"
+            prefWidth = 250
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshPauseScene())
+            }
+          }
+        )
+      }
+    }
+
+    controller.changeScene(scene)
+
+    val timeline: Timeline = new Timeline()
+    val i = IntegerProperty(0)
+    val keyframe: KeyFrame = KeyFrame (
+      50 ms,
+      onFinished = {
+        event: ActionEvent => {
+          if (i() > advice.length) {
+            timeline.stop()
+          } else {
+            text.text = advice.substring(0, i())
+            i() = i() + 1
+          }
+        }
+      }
+    )
+
+    timeline.keyFrames = Seq(keyframe)
+    timeline.cycleCount = Timeline.Indefinite
+
+    timeline.play()
+  }
+
+
+  def refreshAskTheAudienceScene(): Unit = {
+    val pollRes = controller.useAskTheAudience()
+    
+    val xAxis = new CategoryAxis {
+      label = "Answer"
+    }
+    val yAxis = new NumberAxis {
+      label = "Votes in favour"
+    }
+
+    val data = new ObservableBuffer[jfxsc.XYChart.Series[String, Number]]()
+    val inFavourOfA = new XYChart.Series[String, Number] {
+      name = pollRes(0)._1
+    }
+    val inFavourOfB = new XYChart.Series[String, Number] {
+      name = pollRes(1)._1
+    }
+    val inFavourOfC = new XYChart.Series[String, Number] {
+      name = pollRes(2)._1
+    }
+    val inFavourOfD = new XYChart.Series[String, Number] {
+      name = pollRes(3)._1
+    }
+    inFavourOfA.data() += XYChart.Data[String, Number]("|", pollRes(0)._2)
+    inFavourOfB.data() += XYChart.Data[String, Number]("|", pollRes(1)._2)
+    inFavourOfC.data() += XYChart.Data[String, Number]("|", pollRes(2)._2)
+    inFavourOfD.data() += XYChart.Data[String, Number]("|", pollRes(3)._2)
+
+    data.addAll(inFavourOfA, inFavourOfB, inFavourOfC, inFavourOfD)
+
+    val barChart = BarChart(xAxis, yAxis)
+    barChart.barGap = 0
+    barChart.categoryGap = 0
+    barChart.title = "Results of the poll"
+    barChart.data = data
+    
+    val scene = new Scene {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          new Text {
+            text = "Polling the audience..."
+            font = new Font(40)
+            fill = Color.Black
+            alignment = Pos.Center
+          },
+          barChart,
+          new Button {
+            text = "Go back"
+            prefWidth = 250
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshPauseScene())
+            }
+          }
+        )
+      }
+    }
+
+    controller.changeScene(scene)
+  }
+
+
+  def refreshFiftyFiftyScene(): Unit = {
+    val wrongAnswers = controller.useFiftyFifty()
+
+    def disableIfWrong(button: Button): Unit = {
+      for (ans <- wrongAnswers) {
+        if(ans == button.text()) {
+          button.disable = true
+        }
+      }
+    }
+
+    for(i <- 0 to 3) {
+      disableIfWrong(gameScene.root().asInstanceOf[javafx.scene.layout.VBox].children(2).
+        asInstanceOf[javafx.scene.layout.GridPane].children(i).asInstanceOf[javafx.scene.control.Button])
+    }
+
+    controller.resumeGame()
+    controller.changeScene(gameScene)
+  }
+
+
   lazy val gameScene: Scene = new Scene() {
     fill = Color.White
     onKeyPressed = (k: KeyEvent) => k.code match {
-      case KeyCode.Escape =>
-        controller.gamesaveManager.addGamesave(Gamesave(controller.currentGame))
-        controller.changeScene(refreshMenuScene())
-        controller.currentTimerTask.cancel()
-        controller.timer.purge()
-        controller.timer.cancel()
-      case _ =>
+      case KeyCode.Escape => {
+        controller.pauseGame()
+        controller.changeScene(refreshPauseScene())
+      }
+      case _ => 
     }
     root = new VBox {
       maxWidth = 1920
@@ -146,11 +413,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceA(), 1)) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
           val button2: Button = new Button {
             text <== controller.choiceB
@@ -158,11 +420,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceB(), 1)) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
           val button3: Button = new Button {
             text <== controller.choiceC
@@ -170,11 +427,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceC(), 1)) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
           val button4: Button = new Button {
             text <== controller.choiceD
@@ -182,11 +434,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceD(), 1)) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
 
           GridPane.setConstraints(button1, 0, 0)
@@ -197,10 +444,43 @@ class View(model: Model, controller: Controller) {
           padding = Insets(100)
 
           children ++= Seq(button1, button2, button3, button4)
+
+          button1.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceA())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+          button2.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceB())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+          button3.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceC())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+          button4.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceD())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+
+          def enableAllButtons() = {
+            button1.disable = false
+            button2.disable = false
+            button3.disable = false
+            button4.disable = false
+          }
         }
       )
     }
   }
+
 
   def refreshNewGameScene(): Scene = {
     new Scene {
@@ -324,6 +604,7 @@ class View(model: Model, controller: Controller) {
     }
   }
     
+
   def refreshMenuScene(): Scene = {
     new Scene {
       fill = Color.White
@@ -365,7 +646,7 @@ class View(model: Model, controller: Controller) {
             font = new Font(20)
             alignment = Pos.Center
             onAction = (e: ActionEvent) => {
-              controller.changeScene(refreshLoadGameScene())
+              controller.changeScene(refreshLoadGameScene)
             }
           },
           new Button {
@@ -374,7 +655,7 @@ class View(model: Model, controller: Controller) {
             font = new Font(20)
             alignment = Pos.Center
             onAction = (e: ActionEvent) => {
-              controller.changeScene(refreshHighScoreScene())
+              controller.changeScene(refreshHighScoreScene)
             }
           },
           new Button {
@@ -437,6 +718,7 @@ class View(model: Model, controller: Controller) {
       )
     }
   }
+
 
   def refreshHighScoreScene(): Scene = {
     controller.highscoreManager.loadScoreFile()
