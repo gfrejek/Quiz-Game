@@ -29,9 +29,9 @@ class Controller(val config: Config) {
   val scoreStr: StringProperty = StringProperty("")
   val progressStr: StringProperty = StringProperty("")
   var startTimestamp: Instant = _
-  val clock: Clock = new Clock()
+  var clock: Clock = new Clock()
   val clockString: StringProperty = StringProperty("")
-  val timer: Timer = new Timer(true)
+  var timer: Timer = _
   var currentTimerTask: TimerTask = _
 
   val highscoreString = StringProperty(highscoreManager.getHighscoreString())
@@ -64,6 +64,7 @@ class Controller(val config: Config) {
     scoreStr <== currentGame.score.asString
     progressStr <== currentGame.currentQuestion.asString
 
+    timer = new Timer(true)
     askNextQuestion()
   }
 
@@ -80,6 +81,7 @@ class Controller(val config: Config) {
     scoreStr <== currentGame.score.asString
     progressStr <== currentGame.currentQuestion.asString
 
+    timer = new Timer(true)
     askNextQuestion()
   }
 
@@ -126,6 +128,7 @@ class Controller(val config: Config) {
   }
 
   def concludeGame() = {
+    timer.cancel()
     highscoreManager.addScore(new Score(currentGame.score(), currentGame.player.name))
   }
 
@@ -134,7 +137,7 @@ class Controller(val config: Config) {
   }
 
   def resumeGame() = {
-    
+
   }
 
   def clockTask() = {
