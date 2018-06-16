@@ -3,7 +3,7 @@ package quiz.view
 import quiz.controller.Controller
 import quiz.model._
 import scalafx.Includes._
-import scalafx.beans.property.StringProperty
+import scalafx.beans.property.{StringProperty, IntegerProperty}
 import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
@@ -15,6 +15,11 @@ import scalafx.scene.paint.Color._
 import scalafx.scene.paint._
 import scalafx.scene.text.{Font, Text}
 import scalafx.stage.Screen
+import scalafx.animation.{Timeline, KeyFrame}
+import scalafx.scene.chart._
+import scalafx.collections.ObservableBuffer
+import javafx.scene.{chart => jfxsc}
+import scala.language.postfixOps
 
 
 class View(model: Model, controller: Controller) {
@@ -150,8 +155,7 @@ class View(model: Model, controller: Controller) {
                 alignment = Pos.Center
                 disable = controller.currentGame.fiftyFiftyUsed
                 onAction = (e: ActionEvent) => {
-                  // controller.useFiftyFifty()
-                  // controller.changeScene(gameScene)
+                  refreshFiftyFiftyScene()
                 }
               },
               new Button {
@@ -161,7 +165,7 @@ class View(model: Model, controller: Controller) {
                 alignment = Pos.Center
                 disable = controller.currentGame.phoneAFriendUsed
                 onAction = (e: ActionEvent) => {
-                  // controller.changeScene(refreshPhoneAFriendScene())
+                  refreshPhoneAFriendScene()
                 }
               },
               new Button {
@@ -171,7 +175,7 @@ class View(model: Model, controller: Controller) {
                 alignment = Pos.Center
                 disable = controller.currentGame.askTheAudienceUsed
                 onAction = (e: ActionEvent) => {
-                  // controller.changeScene(refreshAskTheAudienceScene())
+                  refreshAskTheAudienceScene()
                 }
               }
             )  
@@ -182,12 +186,160 @@ class View(model: Model, controller: Controller) {
   }
 
 
-  def refreshPhoneAFriendScene(): Scene = {
-    controller.usePhoneAFriend()
+  def refreshPhoneAFriendScene() = {
+    val advice = controller.usePhoneAFriend()
 
-    new Scene {
-
+    val text = new Text {
+      font = new Font(45)
+      fill = Color.Black
+      wrappingWidth = 1500
     }
+    
+    val scene = new Scene {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          new Text {
+            text = "Contacting a friend..."
+            font = new Font(40)
+            fill = Color.Black
+            alignment = Pos.Center
+          },
+          text,
+          new Button {
+            text = "Go back"
+            prefWidth = 250
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshPauseScene())
+            }
+          }
+        )
+      }
+    }
+
+    controller.changeScene(scene)
+
+    val timeline: Timeline = new Timeline()
+    val i = IntegerProperty(0)
+    val keyframe: KeyFrame = KeyFrame (
+      50 ms,
+      onFinished = {
+        event: ActionEvent => {
+          if (i() > advice.length) {
+            timeline.stop()
+          } else {
+            text.text = advice.substring(0, i())
+            i() = i() + 1
+          }
+        }
+      }
+    )
+
+    timeline.keyFrames = Seq(keyframe)
+    timeline.cycleCount = Timeline.Indefinite
+
+    timeline.play()
+  }
+
+
+  def refreshAskTheAudienceScene() = {
+    val pollRes = controller.useAskTheAudience()
+    
+    val xAxis = new CategoryAxis {
+      label = "Answer"
+    }
+    val yAxis = new NumberAxis {
+      label = "Votes in favour"
+    }
+
+    val data = new ObservableBuffer[jfxsc.XYChart.Series[String, Number]]()
+    val inFavourOfA = new XYChart.Series[String, Number] {
+      name = pollRes(0)._1
+    }
+    val inFavourOfB = new XYChart.Series[String, Number] {
+      name = pollRes(1)._1
+    }
+    val inFavourOfC = new XYChart.Series[String, Number] {
+      name = pollRes(2)._1
+    }
+    val inFavourOfD = new XYChart.Series[String, Number] {
+      name = pollRes(3)._1
+    }
+    inFavourOfA.data() += XYChart.Data[String, Number]("|", pollRes(0)._2)
+    inFavourOfB.data() += XYChart.Data[String, Number]("|", pollRes(1)._2)
+    inFavourOfC.data() += XYChart.Data[String, Number]("|", pollRes(2)._2)
+    inFavourOfD.data() += XYChart.Data[String, Number]("|", pollRes(3)._2)
+
+    data.addAll(inFavourOfA, inFavourOfB, inFavourOfC, inFavourOfD)
+
+    val barChart = BarChart(xAxis, yAxis)
+    barChart.barGap = 0
+    barChart.categoryGap = 0
+    barChart.title = "Results of the poll"
+    barChart.data = data
+    
+    val scene = new Scene {
+      fill = Color.White
+      root = new VBox {
+        maxWidth = 1920
+        prefWidth = 1920
+        maxHeight = 1080
+        prefHeight = 1080
+        alignment = Pos.Center
+        spacing = 100
+        padding = Insets(100)
+        children = List (
+          new Text {
+            text = "Polling the audience..."
+            font = new Font(40)
+            fill = Color.Black
+            alignment = Pos.Center
+          },
+          barChart,
+          new Button {
+            text = "Go back"
+            prefWidth = 250
+            font = Font.font(20)
+            alignment = Pos.BottomCenter
+            onAction = (e: ActionEvent) => {
+              controller.changeScene(refreshPauseScene())
+            }
+          }
+        )
+      }
+    }
+
+    controller.changeScene(scene)
+  }
+
+
+  def refreshFiftyFiftyScene() = {
+    val wrongAnswers = controller.useFiftyFifty()
+
+    def disableIfWrong(button: Button) = {
+      for (ans <- wrongAnswers) {
+        if(ans == button.text()) {
+          button.disable = true
+        }
+      }
+    }
+
+    for(i <- 0 to 3) {
+      disableIfWrong(gameScene.root().asInstanceOf[javafx.scene.layout.VBox].children(2).
+        asInstanceOf[javafx.scene.layout.GridPane].children(i).asInstanceOf[javafx.scene.control.Button])
+    }
+
+    controller.resumeGame()
+    controller.changeScene(gameScene)
   }
 
 
@@ -198,7 +350,7 @@ class View(model: Model, controller: Controller) {
         controller.pauseGame()
         controller.changeScene(refreshPauseScene())
       }
-      case _ =>
+      case _ => 
     }
     root = new VBox {
       maxWidth = 1920
@@ -260,11 +412,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceA())) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
           val button2 = new Button {
             text <== controller.choiceB
@@ -272,11 +419,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceB())) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
           val button3 = new Button {
             text <== controller.choiceC
@@ -284,11 +426,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceC())) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
           val button4 = new Button {
             text <== controller.choiceD
@@ -296,11 +433,6 @@ class View(model: Model, controller: Controller) {
             prefWidth = 500
             prefHeight = 125
             font = new Font(35)
-            onAction = (e: ActionEvent) => {
-              if (controller.respondToUserChoice(controller.choiceD())) {
-                controller.changeScene(refreshConcludeGameScene())
-              }
-            }
           }
 
           GridPane.setConstraints(button1, 0, 0)
@@ -311,6 +443,38 @@ class View(model: Model, controller: Controller) {
           padding = Insets(100)
 
           children ++= Seq(button1, button2, button3, button4)
+
+          button1.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceA())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+          button2.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceB())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+          button3.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceC())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+          button4.onAction = (e: ActionEvent) => {
+            if (controller.respondToUserChoice(controller.choiceD())) {
+              controller.changeScene(refreshConcludeGameScene())
+            }
+            enableAllButtons()
+          }
+
+          def enableAllButtons() = {
+            button1.disable = false
+            button2.disable = false
+            button3.disable = false
+            button4.disable = false
+          }
         }
       )
     }

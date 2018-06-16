@@ -35,6 +35,7 @@ class Controller(val config: Config) {
   val clockString: StringProperty = StringProperty("")
   var timer: Timer = _
   var currentTimerTask: TimerTask = _
+  val random: Random = new Random()
 
   val highscoreString = StringProperty(highscoreManager.getHighscoreString())
   val gamesaveList = StringProperty(gamesaveManager.getGamesaveString())
@@ -105,7 +106,7 @@ class Controller(val config: Config) {
     currentGame.currentQuestion() += 1
 
     val choiceList = question.correctAnswer :: question.answer
-    val shuffled = Random.shuffle(choiceList)
+    val shuffled = random.shuffle(choiceList)
 
     choiceA() = shuffled(0)
     choiceB() = shuffled(1)
@@ -163,23 +164,51 @@ class Controller(val config: Config) {
     timer.scheduleAtFixedRate(clockTask(), 0, 1000)
   }
 
+
   def useFiftyFifty() = {
     currentGame.fiftyFiftyUsed = true
 
-
+    List(question.answer(0), question.answer(1))
   }
 
-  def usePhoneAFriend() = {
+
+  def usePhoneAFriend(): String = {
     currentGame.phoneAFriendUsed = true
-
-
+    val choice = if (random.nextInt(100) < 75) question.correctAnswer else {
+      val randomElse = random.nextInt(3)
+      question.answer(randomElse)
+    }
+    
+    { "Oh, hi " + currentGame.player.name + ", it's really nice to hear from you. " +
+    "What?! You are playing the Quiz right now on the TV?! That's amazing news! " +
+    "And you need my help? Well, I'll try my best but I can't make any promises, " +
+    "that's for sure. Okay, go ahead, read me the question. Okay... Right... " +
+    "Hmm... I think the correct answer is " + choice + ", however I'm not entirely " +
+    "sure." }
   }
+
 
   def useAskTheAudience() = {
     currentGame.askTheAudienceUsed = true
+    var pollRes = List[(String, Int)]()
+    val choiceList = question.correctAnswer :: question.answer
+    val shuffled = random.shuffle(choiceList)
 
-    
+    def assignVotes(choice: String) = {
+      if (choice == question.correctAnswer) {
+        random.nextInt(50) + 150
+      } else {
+        random.nextInt(100)
+      }
+    }
+
+    for (choice <- shuffled) {
+      pollRes = (choice, assignVotes(choice)) :: pollRes
+    }
+
+    pollRes
   }
+
 
   def clockTask() = {
     currentTimerTask = new TimerTask(){
