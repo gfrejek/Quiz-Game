@@ -3,7 +3,6 @@ package quiz
 import scalafx.application.JFXApp
 import com.typesafe.config.ConfigFactory
 import quiz.view.View
-import quiz.model.Model
 import quiz.controller.Controller
 import scalafx.stage.Screen
 import scalafx.scene.input.{KeyCodeCombination, KeyCode, KeyCombination}
@@ -12,8 +11,7 @@ object Application extends JFXApp {
   
   val configuration = ConfigFactory.load("app.conf")
   val controller = new Controller(configuration)
-  val model = new Model(controller)
-  val view = new View(model, controller)
+  val view = new View(controller)
   val bounds = Screen.primary.bounds
 
   stage = new JFXApp.PrimaryStage {

@@ -22,7 +22,7 @@ import javafx.scene.{chart => jfxsc}
 import scala.language.postfixOps
 
 
-class View(model: Model, controller: Controller) {
+class View(controller: Controller) {
 
   val bounds: Rectangle2D = Screen.primary.bounds
   val x_mid: Double = bounds.minX + bounds.width / 2 - 1920 / 2
